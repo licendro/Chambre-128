@@ -79,6 +79,7 @@ p{margin:0 0 10px}
 .tb .ctl .x{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--mut);font-size:13px;cursor:pointer}
 .wc{padding:8px 18px calc(20px + env(safe-area-inset-bottom));overflow:auto}
 .pick{display:grid;gap:6px}
+.days{display:flex;flex-wrap:wrap;gap:6px}
 .pick .btn{text-align:left;margin:0}
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:99px;padding:10px 16px;font-size:13px;font-weight:500;z-index:30;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 </style>
@@ -101,9 +102,11 @@ const CODE='lapatate';
 const KEY='ch128_data_v1';
 const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 const DAYS_S=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-const TASKS=[{l:'TIG divers',i:''},{l:'TIG divers',i:''},{l:'Poubelle',i:''},{l:'Sol chambre',i:''},{l:'Salle de bain',i:''}];
-const COLS=[{l:'TIG divers',s:'TIG',i:'',t:[0,1]},{l:'Poubelle',s:'Poub.',i:'',t:[2]},{l:'Sol chambre',s:'Sol',i:'',t:[3]},{l:'Salle de bain',s:'S. de bain',i:'',t:[4]}];
-const MOTIFS=['TIG divers','Poubelle','Sol chambre','Salle de bain','Lit mal fait','Affaires qui traînent','Autre'];
+const SDB='Salle de bain + poubelle';
+const TASKS=[{l:'TIG divers'},{l:'TIG divers'},{l:SDB},{l:'Sol chambre'},{l:'Repos'}];
+const SOL=3,REPOS=4;
+const COLS=[{l:'TIG divers',s:'TIG'},{l:SDB,s:'SdB + poub.'},{l:'Sol chambre',s:'Sol'},{l:'Repos',s:'Repos'}];
+const MOTIFS=['TIG divers',SDB,'Sol chambre','Lit mal fait','Affaires qui traînent','Autre'];
 const COLORS=['#0046d5','#d35400','#7b1fa2','#00897b','#a67c00','#c2185b','#2e7d32'];
 
 /* ---------- utilitaires ---------- */
@@ -119,10 +122,15 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const $=id=>document.getElementById(id);
 
 /* ---------- données ---------- */
-const TYPES=['TIG divers','Poubelle','Sol chambre','Salle de bain'];
+const TYPES=['TIG divers',SDB,'Sol chambre','Repos'];
 const capOf=ty=>TASKS.filter(t=>t.l===ty).length;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function typeOn(plan,d,n){const t=plan[d].indexOf(n);return t<0?null:TASKS[t].l}
+const solOn=(s,d)=>(s.solDays||[]).includes(d);
+// tâche réelle d'un créneau : le créneau "sol" devient du repos les jours sans sol
+function effT(s,d,t){return t===SOL&&!solOn(s,d)?'Repos':TASKS[t].l}
+function typeOn(s,plan,d,n){const t=plan[d].indexOf(n);return t<0?null:effT(s,d,t)}
+// créneaux affichés dans chaque colonne du tableau
+function colSlots(s,d,k){return k===0?[0,1]:k===1?[2]:k===2?(solOn(s,d)?[SOL]:[]):(solOn(s,d)?[REPOS]:[REPOS,SOL])}
 // Génère un planning : tâches fixes respectées, jamais la même tâche 2 jours de suite (si possible), répartition équilibrée
 function generate(s){
   const used=new Set(),fixedSlots=[];
@@ -145,20 +153,30 @@ function generate(s){
         const p=shuffle([...freePeople]);
         freeSlots.forEach((t,j)=>{if(p[j])day[t]=p[j]});
         let r=0;
-        if(d>0)freeSlots.forEach(t=>{if(day[t]!=='—'&&typeOn(plan,d-1,day[t])===TASKS[t].l)r++});
+        if(d>0)freeSlots.forEach(t=>{if(day[t]!=='—'&&typeOn(s,plan,d-1,day[t])===effT(s,d,t))r++});
         if(r<bestDayRep){bestDayRep=r;bestDay=day}
       }
       rep+=bestDayRep;plan.push(bestDay);
     }
     let bal=0;
-    freePeople.forEach(n=>{const c={};plan.forEach((day,d)=>{const ty=typeOn(plan,d,n);if(ty)c[ty]=(c[ty]||0)+1});Object.values(c).forEach(v=>bal+=v*v)});
+    freePeople.forEach(n=>{const c={};plan.forEach((day,d)=>{const ty=typeOn(s,plan,d,n);if(ty)c[ty]=(c[ty]||0)+1});Object.values(c).forEach(v=>bal+=v*v)});
     const score=rep*1000+bal;
     if(score<bestScore){bestScore=score;best=plan}
   }
   return best;
 }
-function defaults(){const m=['LALOUX','BONNET','ROS-WILMOT','USHMAEV','MERCERON'];const s={members:m,chef:'MERCERON',week:mondayISO(),plan:[],fixed:[],rappels:[],reports:[]};s.plan=generate(s);return s}
-function norm(s){if(s&&Array.isArray(s.members)&&Array.isArray(s.plan)){s.rappels=s.rappels||[];s.reports=s.reports||[];s.fixed=s.fixed||[];return s}return null}
+function defaults(){const m=['LALOUX','BONNET','ROS-WILMOT','USHMAEV','MERCERON'];const s={v:2,members:m,chef:'MERCERON',week:mondayISO(),plan:[],fixed:[],solDays:[1,4],rappels:[],reports:[]};s.plan=generate(s);return s}
+function norm(s){
+  if(!(s&&Array.isArray(s.members)&&Array.isArray(s.plan)))return null;
+  s.rappels=s.rappels||[];s.reports=s.reports||[];s.fixed=s.fixed||[];
+  if(!s.v||s.v<2){ // passage poubelle -> salle de bain + poubelle, ajout repos, sol 2 jours
+    s.v=2;s.solDays=[1,4];
+    const fx=[];s.fixed.forEach(f=>{const t=(f.task==='Poubelle'||f.task==='Salle de bain')?SDB:f.task;if(TYPES.includes(t)&&fx.filter(x=>x.task===t).length<capOf(t)&&!fx.some(x=>x.name===f.name))fx.push({name:f.name,task:t})});
+    s.fixed=fx;s.plan=generate(s);s._migrated=true;
+  }
+  s.solDays=s.solDays||[1,4];
+  return s;
+}
 function load(){try{return norm(JSON.parse(localStorage.getItem(KEY)))||defaults()}catch(e){return defaults()}}
 let state=load();
 let tab='planning';
@@ -166,7 +184,7 @@ let tab='planning';
 const rappelsOf=n=>state.rappels.filter(r=>r.name===n).sort((a,b)=>a.date.localeCompare(b.date));
 const count=n=>rappelsOf(n).length;
 const color=n=>'#18181b';
-function tasksOf(n,d){return [...new Set(state.plan[d].map((p,t)=>p===n?TASKS[t].l:null).filter(Boolean))]}
+function tasksOf(n,d){return [...new Set(state.plan[d].map((p,t)=>p===n?effT(state,d,t):null).filter(Boolean))]}
 const iconOf=l=>(TASKS.find(t=>t.l===l)||{i:'•'}).i;
 
 /* ---------- synchro en ligne (Netlify) ---------- */
@@ -185,7 +203,7 @@ async function sync(){
   try{
     const res=await api('GET');remote=true;admin=!!res.admin;
     const s=norm(res.state);
-    if(s){state=s;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+    if(s){const mig=s._migrated;delete s._migrated;state=s;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}if(mig&&admin)push()}
     else if(admin)push();
   }catch(e){remote=false;admin=getCode().trim().toLowerCase()===CODE}
   render();
@@ -240,12 +258,14 @@ function vPlanning(){
   DAYS.forEach((dn,d)=>{
     const dd=dayDate(d),isT=iso(dd)===today;
     h+=`<tr class="${isT?'today':''}"><td class="d">${DAYS_S[d]}<br><small>${fr(dd)}</small></td>`;
-    COLS.forEach(c=>{
-      h+=`<td class="c">${c.t.map(t=>`<span ${admin?`onclick="pick(${d},${t})"`:''}>${nameTag(state.plan[d][t])}</span>`).join('')}</td>`;
+    COLS.forEach((c,k)=>{
+      const sl=colSlots(state,d,k);
+      h+=`<td class="c">${sl.length?sl.map(t=>`<span ${admin?`onclick="pick(${d},${t})"`:''}>${nameTag(state.plan[d][t])}</span>`).join(''):'<span class="nm" style="color:#d4d4d8">—</span>'}</td>`;
     });
     h+='</tr>';
   });
   h+='</tbody></table></div>';
+  h+=`<p class="hint">Sol de la chambre : ${state.solDays.length?state.solDays.slice().sort().map(d=>DAYS[d].toLowerCase()).join(' et '):'aucun jour'} · les autres jours, la personne du sol est au repos.</p>`;
   if((state.fixed||[]).length)h+=`<p class="hint">Tous les jours : ${state.fixed.map(f=>`${esc(f.name)} = ${esc(f.task)}`).join(' · ')}</p>`;
   if(admin){
     h+=`<h4>Modifier le planning</h4>
@@ -259,13 +279,13 @@ function vPlanning(){
 function pick(d,t){
   if(!admin)return;
   const cur=state.plan[d][t];
-  modal(`<h3>${DAYS[d]} · ${TASKS[t].l}</h3><div class="pick">${state.members.map((m,i)=>`<button class="btn ${m===cur?'gold':''}" onclick="setCell(${d},${t},${i})">${m===cur?'&gt; ':''}${esc(m)}</button>`).join('')}</div>
+  modal(`<h3>${DAYS[d]} · ${effT(state,d,t)}</h3><div class="pick">${state.members.map((m,i)=>`<button class="btn ${m===cur?'gold':''}" onclick="setCell(${d},${t},${i})">${m===cur?'&gt; ':''}${esc(m)}</button>`).join('')}</div>
   <button class="btn" onclick="closeModal()">Annuler</button>`);
 }
 function setCell(d,t,i){
   if(!admin)return;const n=state.members[i];state.plan[d][t]=n;save();closeModal();render();
-  const ty=TASKS[t].l,fixe=(state.fixed||[]).some(f=>f.name===n&&f.task===ty);
-  if(!fixe&&((d>0&&typeOn(state.plan,d-1,n)===ty)||(d<6&&typeOn(state.plan,d+1,n)===ty)))toast(`Attention : ${n} fait ${ty} 2 jours de suite`);
+  const ty=effT(state,d,t),fixe=(state.fixed||[]).some(f=>f.name===n&&f.task===ty);
+  if(!fixe&&((d>0&&typeOn(state,state.plan,d-1,n)===ty)||(d<6&&typeOn(state,state.plan,d+1,n)===ty)))toast(`Attention : ${n} fait ${ty} 2 jours de suite`);
   else toast('Planning modifié');
 }
 function mix(){
@@ -280,6 +300,7 @@ function addFixed(){
   if(state.fixed.filter(f=>f.task===ty).length>=capOf(ty)){toast(`${ty} : déjà ${capOf(ty)} personne(s) fixe(s)`);return}
   state.fixed.push({name:n,task:ty});state.plan=generate(state);save();render();toast(`${n} = ${ty} tous les jours`);
 }
+function toggleSol(d){if(!admin)return;const a=new Set(state.solDays);a.has(d)?a.delete(d):a.add(d);state.solDays=[...a].sort();state.plan=generate(state);save();render();toast(`Sol : ${state.solDays.length} jour(s) / semaine · planning refait`)}
 function delFixed(k){if(!admin)return;state.fixed.splice(k,1);state.plan=generate(state);save();render();toast('Tâche fixe retirée, planning refait')}
 
 function vEquipe(){
@@ -314,7 +335,7 @@ function addRappel(i){
 function preTask(i){
   const v=$('rd').value;if(!v)return;
   const d=(new Date(v+'T12:00:00').getDay()+6)%7;
-  const ts=tasksOf(state.members[i],d);
+  const ts=tasksOf(state.members[i],d).filter(t=>t!=='Repos');
   if(ts[0])$('rt').value=ts[0];
 }
 function saveRappel(i){
@@ -377,6 +398,10 @@ function vExport(){
 }
 function vReglages(){
   return `<fieldset class="grp"><legend>État</legend><div class="sub" style="margin:0">${remote?'● En ligne — les modifs sont visibles par tout le monde.':'● Mode local — les modifs restent sur ce téléphone.'}</div></fieldset>
+  <fieldset class="grp"><legend>Jours du sol</legend>
+    <div class="sub" style="margin:0 0 8px">Le sol de la chambre n'est fait que ces jours-là. Les autres jours, la personne prévue est au repos.</div>
+    <div class="days">${DAYS_S.map((dn,d)=>`<button class="btn sm ${solOn(state,d)?'go':''}" onclick="toggleSol(${d})">${dn}</button>`).join('')}</div>
+  </fieldset>
   <fieldset class="grp"><legend>Tâches fixes</legend>
     <div class="sub" style="margin:0 0 6px">Une personne fait la même tâche tous les jours, le reste est réparti automatiquement entre les autres. Tu peux en mettre plusieurs (2 max sur TIG).</div>
     ${(state.fixed||[]).length?state.fixed.map((f,k)=>`<div class="hist" style="border-left-color:var(--fg);align-items:center"><div><b>${esc(f.name)}</b> → ${esc(f.task)} tous les jours</div><button class="x" onclick="delFixed(${k})">X</button></div>`).join(''):'<p class="sub">Aucune tâche fixe.</p>'}
@@ -460,7 +485,7 @@ function tableCard(x,X,Y,w,headH,rowH,cols,rows){
       const cw=cols[k].w,mx=cx+cw/2,my=y+rowH/2;
       if(v&&typeof v==='object'&&!Array.isArray(v)){txt(x,v.t,mx,my-15,F(26,'700'),INK,'center');txt(x,v.sub,mx,my+18,F(19,'500'),'#a1a1aa','center')}
       else if(Array.isArray(v)){v.forEach((n,j)=>txt(x,n,mx,my+(j?20:-20),fit(x,n,cw-20,24,'600'),INK,'center'))}
-      else txt(x,v,mx,my,fit(x,v,cw-20,26,'600'),v==='Repos'?'#a1a1aa':INK,'center');
+      else txt(x,v,mx,my,fit(x,v,cw-20,26,'600'),(v==='Repos'||v==='—')?'#a1a1aa':INK,'center');
       cx+=cw;
     });
   });
@@ -478,7 +503,7 @@ function drawGlobal(){
   chefCard(x,P,P+130,W-2*P,state.chef,'Vérification des lits et du rangement tous les jours');
   const dayW=200,cw=(W-2*P-dayW)/4;
   const cols=[{l:'Jour',w:dayW},...COLS.map(co=>({l:co.l,w:cw}))];
-  const rows=DAYS.map((dn,d)=>[{t:dn,sub:fr(dayDate(d))},...COLS.map(co=>co.t.length>1?co.t.map(t=>state.plan[d][t]):state.plan[d][co.t[0]])]);
+  const rows=DAYS.map((dn,d)=>[{t:dn,sub:fr(dayDate(d))},...COLS.map((co,k)=>{const n=colSlots(state,d,k).map(t=>state.plan[d][t]);return n.length>1?n:(n[0]||'—')})]);
   tableCard(x,P,P+290,W-2*P,headH,rowH,cols,rows);
   return c;
 }
