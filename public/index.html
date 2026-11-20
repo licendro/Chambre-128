@@ -116,9 +116,46 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const $=id=>document.getElementById(id);
 
 /* ---------- données ---------- */
-function rot(m){return DAYS.map((_,d)=>TASKS.map((_,t)=>m[(d+t)%m.length]))}
-function defaults(){const m=['LALOUX','BONNET','ROS-WILMOT','USHMAEV','MERCERON'];return{members:m,chef:'MERCERON',week:mondayISO(),plan:rot(m),rappels:[],reports:[]}}
-function norm(s){if(s&&Array.isArray(s.members)&&Array.isArray(s.plan)){s.rappels=s.rappels||[];s.reports=s.reports||[];return s}return null}
+const TYPES=['TIG divers','Poubelle','Sol chambre','Salle de bain'];
+const capOf=ty=>TASKS.filter(t=>t.l===ty).length;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function typeOn(plan,d,n){const t=plan[d].indexOf(n);return t<0?null:TASKS[t].l}
+// Génère un planning : tâches fixes respectées, jamais la même tâche 2 jours de suite (si possible), répartition équilibrée
+function generate(s){
+  const used=new Set(),fixedSlots=[];
+  (s.fixed||[]).forEach(f=>{
+    if(!s.members.includes(f.name))return;
+    const t=TASKS.findIndex((x,i)=>x.l===f.task&&!used.has(i));
+    if(t>=0){used.add(t);fixedSlots.push([t,f.name])}
+  });
+  const fixedNames=new Set(fixedSlots.map(x=>x[1]));
+  const freeSlots=TASKS.map((_,i)=>i).filter(i=>!used.has(i));
+  const freePeople=s.members.filter(m=>!fixedNames.has(m));
+  let best=null,bestScore=Infinity;
+  for(let it=0;it<400;it++){
+    const plan=[];let rep=0;
+    for(let d=0;d<7;d++){
+      let bestDay=null,bestDayRep=Infinity;
+      for(let k=0;k<40&&bestDayRep>0;k++){
+        const day=new Array(TASKS.length).fill('—');
+        fixedSlots.forEach(([t,n])=>day[t]=n);
+        const p=shuffle([...freePeople]);
+        freeSlots.forEach((t,j)=>{if(p[j])day[t]=p[j]});
+        let r=0;
+        if(d>0)freeSlots.forEach(t=>{if(day[t]!=='—'&&typeOn(plan,d-1,day[t])===TASKS[t].l)r++});
+        if(r<bestDayRep){bestDayRep=r;bestDay=day}
+      }
+      rep+=bestDayRep;plan.push(bestDay);
+    }
+    let bal=0;
+    freePeople.forEach(n=>{const c={};plan.forEach((day,d)=>{const ty=typeOn(plan,d,n);if(ty)c[ty]=(c[ty]||0)+1});Object.values(c).forEach(v=>bal+=v*v)});
+    const score=rep*1000+bal;
+    if(score<bestScore){bestScore=score;best=plan}
+  }
+  return best;
+}
+function defaults(){const m=['LALOUX','BONNET','ROS-WILMOT','USHMAEV','MERCERON'];const s={members:m,chef:'MERCERON',week:mondayISO(),plan:[],fixed:[],rappels:[],reports:[]};s.plan=generate(s);return s}
+function norm(s){if(s&&Array.isArray(s.members)&&Array.isArray(s.plan)){s.rappels=s.rappels||[];s.reports=s.reports||[];s.fixed=s.fixed||[];return s}return null}
 function load(){try{return norm(JSON.parse(localStorage.getItem(KEY)))||defaults()}catch(e){return defaults()}}
 let state=load();
 let tab='planning';
@@ -206,11 +243,11 @@ function vPlanning(){
     h+='</tr>';
   });
   h+='</tbody></table>';
+  if((state.fixed||[]).length)h+=`<p class="hint">Tous les jours : ${state.fixed.map(f=>`${esc(f.name)} = ${esc(f.task)}`).join(' · ')}</p>`;
   if(admin){
     h+=`<h4>Modifier le planning</h4>
     <button class="btn gold" onclick="mix()">Mix aléatoire</button>
-    <button class="btn" onclick="autoRot()">Rotation dans l'ordre de la liste</button>
-    <p class="hint">Pour modifier à la main, appuie sur un nom dans le tableau.</p>`;
+    <p class="hint">Le mix évite que quelqu'un refasse la même tâche 2 jours de suite et respecte les tâches fixes (Réglages).<br>Pour modifier à la main, appuie sur un nom dans le tableau.</p>`;
   }else{
     h+=`<p class="hint">Lecture seule · le chef de chambre modifie via Admin</p>`;
   }
@@ -222,15 +259,25 @@ function pick(d,t){
   modal(`<h3>${DAYS[d]} · ${TASKS[t].l}</h3><div class="pick">${state.members.map((m,i)=>`<button class="btn ${m===cur?'gold':''}" onclick="setCell(${d},${t},${i})">${m===cur?'&gt; ':''}${esc(m)}</button>`).join('')}</div>
   <button class="btn" onclick="closeModal()">Annuler</button>`);
 }
-function setCell(d,t,i){if(!admin)return;state.plan[d][t]=state.members[i];save();closeModal();render();toast('Planning modifié')}
-function autoRot(){if(!admin)return;if(confirm('Remettre la rotation dans l\'ordre ? Le planning actuel sera remplacé.')){state.plan=rot(state.members);save();render();toast('Rotation remise')}}
+function setCell(d,t,i){
+  if(!admin)return;const n=state.members[i];state.plan[d][t]=n;save();closeModal();render();
+  const ty=TASKS[t].l,fixe=(state.fixed||[]).some(f=>f.name===n&&f.task===ty);
+  if(!fixe&&((d>0&&typeOn(state.plan,d-1,n)===ty)||(d<6&&typeOn(state.plan,d+1,n)===ty)))toast(`Attention : ${n} fait ${ty} 2 jours de suite`);
+  else toast('Planning modifié');
+}
 function mix(){
   if(!admin)return;
   if(!confirm('Mélanger le planning au hasard ? Le planning actuel sera remplacé.'))return;
-  const m=[...state.members];
-  for(let i=m.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[m[i],m[j]]=[m[j],m[i]]}
-  state.plan=rot(m);save();render();toast('Planning mélangé !');
+  state.plan=generate(state);save();render();toast('Planning mélangé');
 }
+function addFixed(){
+  if(!admin)return;
+  const n=$('fxn').value,ty=$('fxt').value;if(!n||!ty)return;
+  state.fixed=(state.fixed||[]).filter(f=>f.name!==n);
+  if(state.fixed.filter(f=>f.task===ty).length>=capOf(ty)){toast(`${ty} : déjà ${capOf(ty)} personne(s) fixe(s)`);return}
+  state.fixed.push({name:n,task:ty});state.plan=generate(state);save();render();toast(`${n} = ${ty} tous les jours`);
+}
+function delFixed(k){if(!admin)return;state.fixed.splice(k,1);state.plan=generate(state);save();render();toast('Tâche fixe retirée, planning refait')}
 
 function vEquipe(){
   let h=`<p class="sub" style="margin:0 0 10px">Au <b>2<sup>e</sup> rappel</b>, la personne passe en <b style="color:#c00">rouge</b> et tu peux faire un compte rendu.</p>`;
@@ -327,6 +374,13 @@ function vExport(){
 }
 function vReglages(){
   return `<fieldset class="grp"><legend>État</legend><div class="sub" style="margin:0">${remote?'[EN LIGNE] Les modifs sont visibles par tout le monde.':'[LOCAL] Les modifs restent sur ce téléphone.'}</div></fieldset>
+  <fieldset class="grp"><legend>Tâches fixes</legend>
+    <div class="sub" style="margin:0 0 6px">Une personne fait la même tâche tous les jours, le reste est réparti automatiquement entre les autres. Tu peux en mettre plusieurs (2 max sur TIG).</div>
+    ${(state.fixed||[]).length?state.fixed.map((f,k)=>`<div class="hist" style="border-left-color:var(--fg);align-items:center"><div><b>${esc(f.name)}</b> → ${esc(f.task)} tous les jours</div><button class="x" onclick="delFixed(${k})">X</button></div>`).join(''):'<p class="sub">Aucune tâche fixe.</p>'}
+    <div class="row2" style="margin-top:6px"><select id="fxn">${state.members.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join('')}</select>
+    <select id="fxt">${TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+    <button class="btn" onclick="addFixed()">Ajouter et refaire le planning</button>
+  </fieldset>
   <fieldset class="grp"><legend>Paramètres</legend>
     <div class="f"><span>Semaine du (lundi)</span><input type="date" value="${state.week}" onchange="setWeek(this.value)"></div>
     <div class="f"><span>Chef de chambre</span><select onchange="setChef(this.value)">${state.members.map(m=>`<option value="${esc(m)}" ${m===state.chef?'selected':''}>${esc(m)}</option>`).join('')}</select></div>
@@ -350,6 +404,7 @@ function rename(i,v){
   state.rappels.forEach(r=>{if(r.name===old)r.name=v});
   state.reports.forEach(r=>{if(r.name===old)r.name=v;if(r.chef===old)r.chef=v});
   if(state.chef===old)state.chef=v;
+  (state.fixed||[]).forEach(f=>{if(f.name===old)f.name=v});
   save();render();toast('Nom modifié');
 }
 function exportJSON(){
