@@ -3,93 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1410">
+<meta name="theme-color" content="#0053ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Chambre 128 — Planning</title>
+<title>Chambre 128 :: Planning</title>
 <style>
-:root{--bg:#0b1410;--card:#13201a;--card2:#1a2b23;--line:#24382e;--txt:#e8efe9;--mut:#8fa598;--acc:#3fa463;--gold:#d4af52;--red:#e05050;--redbg:#3a1616}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
-header{position:sticky;top:0;z-index:5;background:rgba(11,20,16,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:calc(12px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
-.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#2c6e45,#1b3f2a);display:grid;place-items:center;font-weight:800;font-size:18px;color:var(--gold);border:1px solid #3a5a46;flex-shrink:0}
-header h1{font-size:18px;margin:0;letter-spacing:.5px}
-header small{color:var(--mut);font-size:12px}
-main{padding:16px;max-width:640px;margin:auto}
-.chef{background:linear-gradient(135deg,#3b3115,#211c0c);border:1px solid #6b5a26;border-radius:16px;padding:14px 16px;margin-bottom:16px}
-.chef b{color:var(--gold)}
-.chef .k{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#bfa35a}
-.day{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
-.day.today{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
-.dh{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--card2);font-weight:700}
-.dh span{color:var(--mut);font-weight:500;font-size:13px}
-.dh span.t{color:var(--acc)}
-.row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--line);gap:10px}
-.row label{font-size:14px;color:var(--mut);display:flex;align-items:center;gap:8px}
-select,input,textarea{background:#0e1914;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:16px;font-family:inherit;width:100%}
-textarea{resize:vertical}
-.row select{width:auto;min-width:150px;font-weight:700}
-select.warn{border-color:var(--red);color:#ff9d9d;background:#2a1212}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;width:100%;margin-top:8px;font-family:inherit}
-.btn:active{transform:scale(.98)}
-.btn.sec{background:var(--card2);border:1px solid var(--line);color:var(--txt)}
-.btn.red{background:var(--red)}
-.btn.gold{background:var(--gold);color:#1d1606}
-.btn.sm{width:auto;padding:8px 12px;font-size:13px;margin:0}
-.mem{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;transition:.2s}
-.mem.bad{background:var(--redbg);border-color:var(--red)}
-.mem.bad h3{color:#ffb3b3}
-.mt{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.mt h3{margin:0;font-size:17px;display:flex;align-items:center;gap:8px}
-.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:#1f3a2a;color:#8fe0a8;white-space:nowrap}
-.badge.w{background:#3d3214;color:var(--gold)}
-.badge.r{background:var(--red);color:#fff}
-.acts{display:flex;gap:8px;margin-top:12px}
-.acts .btn{margin:0}
-.sub{color:var(--mut);font-size:13px;margin-top:4px}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(11,20,16,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
-nav button{flex:1;background:none;border:0;color:var(--mut);padding:10px 0 12px;font-size:12px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
-nav button i{font-style:normal;font-size:20px}
-nav button.on{color:var(--acc);font-weight:700}
-nav .alert{position:absolute;top:6px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:var(--red)}
-.sec-t{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mut);margin:20px 0 8px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grid2 .btn{margin:0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;z-index:20}
-.sheet{background:var(--card);width:100%;max-width:640px;margin:auto auto 0;border-radius:20px 20px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;border-top:1px solid var(--line);animation:up .2s ease}
-@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-.sheet h3{margin:0 0 12px}
-.f{margin-bottom:10px}
-.f span{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}
-.hist{border-left:3px solid var(--red);padding:8px 12px;background:#0e1914;border-radius:0 10px 10px 0;margin-bottom:8px;font-size:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.hist .x{background:none;border:0;color:var(--mut);font-size:18px;padding:0 4px}
-.prev{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
-#login{min-height:100vh;display:grid;place-items:center;padding:24px}
-.lbox{width:100%;max-width:360px;text-align:center}
-.lbox .logo{width:84px;height:84px;font-size:30px;margin:0 auto 16px;border-radius:24px}
-.lbox h1{margin:0 0 4px}
-.err{color:var(--red);font-size:14px;min-height:20px;margin-top:8px}
-.hint{color:var(--mut);font-size:12px;text-align:center;margin:10px 0 0}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#24382e;border:1px solid #3a5a46;padding:10px 16px;border-radius:99px;font-size:14px;z-index:30;white-space:nowrap}
-.lock{margin-left:auto;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:99px;padding:8px 14px;font-size:14px;font-weight:700;font-family:inherit}
-.lock.on{border-color:var(--gold);color:var(--gold);background:#2e2610}
-.ro{font-weight:700;padding:6px 12px;border-radius:99px;border:1.5px solid;font-size:14px;white-space:nowrap}
-.info{font-size:13px;color:var(--mut);text-align:center;margin:4px 0 14px}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+body{margin:0;font-family:Verdana,Tahoma,Geneva,sans-serif;font-size:12px;color:#000;min-height:100vh;
+  padding:calc(8px + env(safe-area-inset-top)) 6px calc(110px + env(safe-area-inset-bottom));
+  background-color:#245edb;
+  background-image:radial-gradient(rgba(255,255,255,.13) 1px,transparent 1.2px),linear-gradient(180deg,#5a8be0 0%,#245edb 35%,#1941a5 100%);
+  background-size:6px 6px,100% 100%;background-attachment:fixed}
+
+/* ----- fenêtre XP ----- */
+.win{background:#ece9d8;border:3px solid #0831d9;border-top-width:0;border-radius:8px 8px 3px 3px;box-shadow:3px 4px 0 rgba(0,0,30,.4);max-width:660px;margin:0 auto 12px;overflow:hidden}
+.tb{background:linear-gradient(180deg,#0997ff 0%,#0053ee 10%,#0050ee 45%,#0066ff 85%,#003dd7 100%);color:#fff;font:bold 13px Tahoma,Verdana,sans-serif;padding:6px 6px 6px 9px;display:flex;align-items:center;gap:6px;text-shadow:1px 1px #0f1089;border-radius:6px 6px 0 0}
+.tb .ctl{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
+.tb .ctl span{width:22px;height:22px;border:1px solid #fff;border-radius:3px;background:linear-gradient(#5c9cf7,#1a5ad8);display:grid;place-items:center;font:bold 12px Tahoma;cursor:pointer}
+.tb .ctl span.x{background:linear-gradient(#ef8d6d,#c8401c)}
+.wc{padding:8px}
+
+/* ----- en-tête ----- */
+.hd{display:flex;align-items:center;gap:10px;padding:10px 10px 6px}
+.brand{font:italic 900 34px "Arial Black",Impact,sans-serif;line-height:1;letter-spacing:-1px;
+  background:linear-gradient(180deg,#fff600 0%,#ffae00 50%,#ff3c00 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:1px #6b1800;filter:drop-shadow(2px 2px 0 #000)}
+.slogan{font:11px Tahoma;color:#333;margin-top:4px}
+.lk{margin-left:auto}
+marquee{display:block;background:#000;color:#39ff14;font:bold 12px "Courier New",monospace;padding:4px 0;border-top:2px solid #808080;border-bottom:2px solid #fff}
+
+/* ----- onglets ----- */
+.tabs{display:flex;gap:2px;padding:8px 6px 0}
+.tabs button{flex:1;font:bold 12px Tahoma,Verdana;padding:8px 3px;border:1px solid #919b9c;border-bottom:0;border-radius:4px 4px 0 0;background:linear-gradient(#fff,#ecebe5);color:#000;position:relative}
+.tabs button.on{background:#fcfcfe;border-top:3px solid #ffc83c;top:1px;z-index:1}
+.tabs .alert{color:#c00;animation:bl 1s steps(1) infinite}
+.panel{background:#fcfcfe;border:1px solid #919b9c;margin:0 6px 6px;padding:8px;min-height:200px}
+
+/* ----- tableau ----- */
+table.pl{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff;font-size:10.5px;border:2px solid #404040}
+.pl th{background:linear-gradient(#fff,#d6d3ce);border:1px solid #808080;padding:6px 1px;font:bold 10px Tahoma,Verdana;line-height:1.3}
+.pl th i{font-style:normal;font-size:15px;display:block}
+.pl td{border:1px solid #a0a0a0;padding:5px 2px;text-align:center;vertical-align:middle;word-break:break-word;line-height:1.25}
+.pl tbody tr:nth-child(even) td{background:#eef3ff}
+.pl td.d{background:linear-gradient(90deg,#dfe8f7,#c3d1ef)!important;font-weight:bold;font-size:11px}
+.pl td.d small{font-weight:normal;color:#444;font-size:9.5px}
+.pl tr.today td{background:#ffffcc!important}
+.pl tr.today td.d{background:linear-gradient(90deg,#fff36b,#ffd000)!important}
+.nm{font-weight:bold;display:block;padding:2px 1px}
+.nm+.nm{border-top:1px dashed #bbb;margin-top:2px;padding-top:4px}
+.nm.bad{background:#cc0000;color:#fff!important;border-radius:2px}
+.pl.adm td.c{cursor:pointer}
+.pl.adm td.c .nm{text-decoration:underline dotted}
+.pl.adm td.c:active{background:#c1d2ee!important}
+.legend{font:10px Tahoma;color:#444;text-align:center;margin-top:6px}
+
+/* ----- boîtes ----- */
+.chef{border:3px ridge #d4a800;background:linear-gradient(#fffbe0,#ffe68a);padding:8px;margin-bottom:8px;text-align:center}
+.chef .t{font:bold 11px Tahoma;color:#8a6a00;letter-spacing:1px}
+.chef .n{font:900 20px "Arial Black",Impact,sans-serif;color:#b8000a;margin:2px 0}
+.chef .s{font-size:11px}
+@keyframes bl{50%{opacity:0}}
+.blink{animation:bl 1s steps(1) infinite}
+fieldset.grp{border:1px solid #d0d0bf;border-radius:4px;margin:0 0 10px;padding:6px 8px 8px;background:#fff}
+fieldset.grp legend{color:#0046d5;font:bold 12px Tahoma;padding:0 4px}
+fieldset.grp.bad{background:#ffe3e3;border:2px solid #c00}
+fieldset.grp.bad legend{color:#c00}
+.st{font:bold 11px Tahoma;padding:2px 6px;border:1px solid;display:inline-block}
+.st.ok{color:#007a00;border-color:#007a00;background:#e6ffe6}
+.st.w{color:#a65d00;border-color:#d08000;background:#fff3d6}
+.st.r{color:#fff;border-color:#800;background:#c00}
+.sub{color:#444;font-size:11px;margin-top:4px}
+.row2{display:flex;gap:6px}
+.row2 .btn{margin-top:6px}
+
+/* ----- boutons XP ----- */
+.btn{display:block;width:100%;margin-top:6px;font:bold 12px Tahoma,Verdana,sans-serif;padding:9px 8px;border:1px solid #003c74;border-radius:3px;background:linear-gradient(#fff,#ecebe6 86%,#d6d0c5);color:#000;text-align:center;text-decoration:none;cursor:pointer;box-shadow:inset -1px -1px 0 rgba(0,0,0,.08)}
+.btn:active{background:linear-gradient(#dcdad2,#fff)}
+.btn.go{background:linear-gradient(#8fe08f,#2e9e2e);color:#fff;border-color:#1d6b1d;text-shadow:1px 1px #135013}
+.btn.red{background:linear-gradient(#ff8b8b,#c40000);color:#fff;border-color:#800;text-shadow:1px 1px #600}
+.btn.gold{background:linear-gradient(#fff6b0,#ffc400);border-color:#a07800}
+.btn.sm{display:inline-block;width:auto;padding:5px 9px;margin:0}
+.lock.on{background:linear-gradient(#fff6b0,#ffc400);border-color:#a07800}
+
+/* ----- formulaires ----- */
+select,input,textarea{background:#fff;color:#000;border:1px solid #7f9db9;border-radius:0;padding:6px;font-size:16px;font-family:Tahoma,Verdana,sans-serif;width:100%}
+.f{margin-bottom:8px}
+.f span{display:block;font:bold 11px Tahoma;margin-bottom:3px}
+h4{font:bold 12px Tahoma;color:#0046d5;margin:12px 0 6px;border-bottom:1px solid #b0c4de;padding-bottom:3px}
+.hist{border:1px solid #c00;border-left:5px solid #c00;padding:6px 8px;background:#fff5f5;margin-bottom:6px;font-size:11px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.hist .x{border:1px solid #888;background:linear-gradient(#fff,#ddd);font-size:11px;padding:1px 5px}
+.prev{width:100%;border:2px inset #ccc;display:block}
+.hint{color:#555;font-size:10.5px;text-align:center;margin:8px 0 0}
+.err{color:#c00;font-weight:bold;font-size:11px;min-height:16px;margin-top:4px}
+
+/* ----- fenêtres pop-up ----- */
+.modal{position:fixed;inset:0;background:rgba(0,0,40,.45);display:flex;align-items:center;justify-content:center;padding:10px;z-index:20}
+.dlg{width:100%;max-width:460px;max-height:88vh;display:flex;flex-direction:column;margin:0}
+.dlg .wc{overflow:auto}
+.pick{display:grid;gap:4px}
+.pick .btn{text-align:left;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#ffffe1;border:1px solid #000;border-radius:8px;padding:8px 12px;font:11px Tahoma;z-index:30;box-shadow:2px 2px 4px rgba(0,0,0,.4);max-width:90vw}
+
+/* ----- pied de page ----- */
+.foot{text-align:center;color:#fff;font:10px Tahoma;text-shadow:1px 1px #000;max-width:660px;margin:0 auto}
+.foot .bd{display:inline-block;border:1px solid #fff;background:#000;padding:2px 5px;margin:3px;font:bold 9px Verdana}
+.foot .bd b{color:#ff0}
 </style>
 </head>
 <body>
 
-<div id="app">
-  <header>
-    <div class="logo">128</div>
-    <div><h1>Chambre 128</h1><small id="wk"></small></div>
-    <button id="lock" class="lock" onclick="lockBtn()">🔒</button>
-  </header>
-  <main id="main"></main>
-  <nav id="nav"></nav>
+<div class="win">
+  <div class="tb">🪖 Chambre128.exe — Planning<div class="ctl"><span>_</span><span>□</span><span class="x">✕</span></div></div>
+  <div class="hd">
+    <div><div class="brand">Chambre 128</div><div class="slogan">Site officiel · 4<sup>e</sup> compagnie</div></div>
+    <div class="lk"><button id="lock" class="btn sm lock" onclick="lockBtn()">🔒</button></div>
+  </div>
+  <marquee id="mq" scrollamount="4">★ Bienvenue sur le site de la chambre 128 ★</marquee>
+  <div class="tabs" id="nav"></div>
+  <div class="panel" id="main"></div>
+</div>
+<div class="foot">
+  <span class="bd">Optimisé pour <b>Internet Explorer 6.0</b></span><span class="bd">Résolution <b>800×600</b></span><br>
+  © 2026 Chambre 128 — Tous droits réservés
 </div>
 
 <div id="modal" class="modal" hidden></div>
@@ -98,9 +133,11 @@ nav .alert{position:absolute;top:6px;left:calc(50% + 8px);width:9px;height:9px;b
 const CODE='lapatate';
 const KEY='ch128_data_v1';
 const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const DAYS_S=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const TASKS=[{l:'TIG divers',i:'🧹'},{l:'TIG divers',i:'🧹'},{l:'Poubelle',i:'🗑️'},{l:'Sol chambre',i:'🧽'},{l:'Salle de bain',i:'🚿'}];
+const COLS=[{l:'TIG divers',s:'TIG',i:'🧹',t:[0,1]},{l:'Poubelle',s:'Poub.',i:'🗑️',t:[2]},{l:'Sol chambre',s:'Sol',i:'🧽',t:[3]},{l:'Salle de bain',s:'S. de bain',i:'🚿',t:[4]}];
 const MOTIFS=['TIG divers','Poubelle','Sol chambre','Salle de bain','Lit mal fait','Affaires qui traînent','Autre'];
-const COLORS=['#4fa3e0','#e0884f','#a06fe0','#4fd0b0','#d4af52','#e05f8f','#8fd04f'];
+const COLORS=['#0046d5','#d35400','#7b1fa2','#00897b','#a67c00','#c2185b','#2e7d32'];
 
 /* ---------- utilitaires ---------- */
 function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -120,6 +157,13 @@ function defaults(){const m=['LALOUX','BONNET','ROS-WILMOT','USHMAEV','MERCERON'
 function norm(s){if(s&&Array.isArray(s.members)&&Array.isArray(s.plan)){s.rappels=s.rappels||[];s.reports=s.reports||[];return s}return null}
 function load(){try{return norm(JSON.parse(localStorage.getItem(KEY)))||defaults()}catch(e){return defaults()}}
 let state=load();
+let tab='planning';
+
+const rappelsOf=n=>state.rappels.filter(r=>r.name===n).sort((a,b)=>a.date.localeCompare(b.date));
+const count=n=>rappelsOf(n).length;
+const color=n=>{const i=state.members.indexOf(n);return i<0?'#555':COLORS[i%COLORS.length]};
+function tasksOf(n,d){return [...new Set(state.plan[d].map((p,t)=>p===n?TASKS[t].l:null).filter(Boolean))]}
+const iconOf=l=>(TASKS.find(t=>t.l===l)||{i:'•'}).i;
 
 /* ---------- synchro en ligne (Netlify) ---------- */
 let admin=false,remote=false,saveT=null;
@@ -140,7 +184,6 @@ async function sync(){
     if(s){state=s;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
     else if(admin)push();
   }catch(e){remote=false;admin=getCode().trim().toLowerCase()===CODE}
-  if(!admin&&tab==='equipe')tab='planning';
   render();
 }
 function save(){
@@ -150,94 +193,97 @@ function save(){
 async function push(){try{await api('POST',state)}catch(e){toast(e.message==='401'?'Code refusé':'⚠️ Pas enregistré en ligne, réessaie')}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&remote)sync()});
 
-const rappelsOf=n=>state.rappels.filter(r=>r.name===n).sort((a,b)=>a.date.localeCompare(b.date));
-const count=n=>rappelsOf(n).length;
-const color=n=>{const i=state.members.indexOf(n);return i<0?'#888':COLORS[i%COLORS.length]};
-function tasksOf(n,d){return [...new Set(state.plan[d].map((p,t)=>p===n?TASKS[t].l:null).filter(Boolean))]}
-const iconOf=l=>(TASKS.find(t=>t.l===l)||{i:'•'}).i;
-
 /* ---------- accès admin ---------- */
 function lockBtn(){
   if(admin){
-    modal(`<h3>🔓 Mode chef de chambre</h3><p class="sub">Tu peux modifier le planning, mettre des rappels et faire les comptes rendus. Les modifs sont visibles par tout le monde.</p>
-    <button class="btn sec" onclick="logout()">🔒 Quitter le mode admin</button><button class="btn sec" onclick="closeModal()">Fermer</button>`);
+    modal(`<h3>🔓 Mode chef de chambre</h3><p>Tu peux modifier le planning, mettre des rappels et faire les comptes rendus. Les modifs sont visibles par tout le monde.</p>
+    <button class="btn" onclick="logout()">🔒 Quitter le mode admin</button><button class="btn" onclick="closeModal()">Fermer</button>`);
     return;
   }
-  modal(`<h3>🔒 Accès chef de chambre</h3><p class="sub" style="margin-bottom:12px">Code nécessaire pour modifier le planning et gérer les rappels.</p>
+  modal(`<h3>🔒 Accès chef de chambre</h3><p>Entre le code pour modifier le planning et gérer les rappels.</p>
   <input id="code" type="password" placeholder="Code d'accès" autocomplete="off" autocapitalize="off">
   <div class="err" id="err"></div>
-  <button class="btn" onclick="tryLogin()">Déverrouiller</button><button class="btn sec" onclick="closeModal()">Annuler</button>`);
+  <div class="row2"><button class="btn go" onclick="tryLogin()">OK</button><button class="btn" onclick="closeModal()">Annuler</button></div>`);
   setTimeout(()=>{const c=$('code');if(c){c.focus();c.onkeydown=e=>{if(e.key==='Enter')tryLogin()}}},60);
 }
 async function tryLogin(){
   const v=$('code').value.trim();setCode(v);
   if(remote)await sync();else admin=v.toLowerCase()===CODE;
-  if(admin){closeModal();render();toast('Mode admin activé 🔓')}
-  else{setCode('');const e=$('err');if(e){e.textContent='Code incorrect';$('code').value=''}}
+  if(admin){closeModal();render();toast('🔓 Mode admin activé')}
+  else{setCode('');const e=$('err');if(e){e.textContent='✖ Code incorrect';$('code').value=''}}
 }
 function logout(){setCode('');admin=false;tab='planning';closeModal();if(remote)sync();else render();toast('Mode admin désactivé')}
 
 /* ---------- rendu ---------- */
-let tab='planning';
 function go(t){tab=t;render();window.scrollTo(0,0)}
 function render(){
-  $('wk').textContent='Semaine du '+fr(dayDate(0))+' au '+fr(dayDate(6));
-  const lk=$('lock');lk.textContent=admin?'🔓 Admin':'🔒';lk.className='lock'+(admin?' on':'');
+  const lk=$('lock');lk.textContent=admin?'🔓 Admin':'🔒 Admin';lk.className='btn sm lock'+(admin?' on':'');
   if(!admin&&tab==='equipe')tab='planning';
+  $('mq').textContent=`★ Bienvenue sur le site de la chambre 128 ★ Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))} ★ Chef de chambre : ${state.chef} ★ Une chambre propre = une chambre heureuse ★`;
   const alert=admin&&state.members.some(m=>count(m)>=2);
-  const tabs=admin?[['planning','📅','Planning'],['equipe','👥','Rappels'],['export','⚙️','Images & réglages']]:[['planning','📅','Planning'],['export','🖼️','Images']];
-  $('nav').innerHTML=tabs.map(([k,i,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')"><i>${i}</i>${l}${k==='equipe'&&alert?'<span class="alert"></span>':''}</button>`).join('');
-  $('main').innerHTML=tab==='planning'?vPlanning():tab==='equipe'?vEquipe():vExport();
+  const tabs=admin?[['planning','📅 Planning'],['equipe','⚠ Rappels'],['export','🖼️ Images'],['reglages','⚙ Réglages']]:[['planning','📅 Planning'],['export','🖼️ Images']];
+  if(!tabs.some(t=>t[0]===tab))tab='planning';
+  $('nav').innerHTML=tabs.map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')">${l}${k==='equipe'&&alert?' <span class="alert">●</span>':''}</button>`).join('');
+  $('main').innerHTML=({planning:vPlanning,equipe:vEquipe,export:vExport,reglages:vReglages})[tab]();
 }
+
+function nameTag(n){return `<span class="nm ${admin&&count(n)>=2?'bad':''}" style="color:${color(n)}">${esc(n)}</span>`}
 
 function vPlanning(){
   const today=iso(new Date());
-  let h=`<div class="chef"><div class="k">👑 Chef de chambre</div><div style="font-size:21px;margin:4px 0"><b>${esc(state.chef)}</b></div><div class="sub" style="color:#d8c79a">Vérification tous les jours : lits faits, rien qui traîne, rangement général.</div></div>`;
+  let h=`<div class="chef"><div class="t">★ CHEF DE CHAMBRE ★</div><div class="n">${esc(state.chef)}</div><div class="s">Vérification <b>tous les jours</b> : lits faits, rien qui traîne, rangement.</div></div>`;
+  h+=`<table class="pl ${admin?'adm':''}"><colgroup><col style="width:15%"><col><col><col><col></colgroup>
+  <thead><tr><th>Jour</th>${COLS.map(c=>`<th><i>${c.i}</i>${c.s}</th>`).join('')}</tr></thead><tbody>`;
   DAYS.forEach((dn,d)=>{
     const dd=dayDate(d),isT=iso(dd)===today;
-    h+=`<div class="day ${isT?'today':''}"><div class="dh">${dn}<span class="${isT?'t':''}">${isT?'Aujourd\'hui · ':''}${fr(dd)}</span></div>`;
-    TASKS.forEach((t,ti)=>{
-      const cur=state.plan[d][ti];
-      const ctl=admin
-        ?`<select class="${count(cur)>=2?'warn':''}" onchange="setCell(${d},${ti},this.value)">${state.members.map(m=>`<option value="${esc(m)}" ${m===cur?'selected':''}>${esc(m)}</option>`).join('')}</select>`
-        :`<span class="ro" style="border-color:${color(cur)};background:${hexA(color(cur),.15)}">${esc(cur)}</span>`;
-      h+=`<div class="row"><label><span>${t.i}</span>${t.l}</label>${ctl}</div>`;
+    h+=`<tr class="${isT?'today':''}"><td class="d">${isT?'<span class="blink">►</span>':''}${DAYS_S[d]}<br><small>${fr(dd)}</small></td>`;
+    COLS.forEach(c=>{
+      h+=`<td class="c">${c.t.map(t=>`<span ${admin?`onclick="pick(${d},${t})"`:''}>${nameTag(state.plan[d][t])}</span>`).join('')}</td>`;
     });
-    h+='</div>';
+    h+='</tr>';
   });
+  h+='</tbody></table>';
+  h+=`<div class="legend">${state.members.map(m=>`<span style="color:${color(m)};font-weight:bold">■</span> ${esc(m)}`).join(' &nbsp; ')}</div>`;
   if(admin){
-    h+=`<button class="btn gold" onclick="mix()">🎲 Mix aléatoire</button>
-    <button class="btn sec" onclick="autoRot()">🔄 Rotation dans l'ordre de la liste</button>
-    <p class="hint">Pour modifier à la main, appuie directement sur un nom.</p>`;
+    h+=`<h4>Modifier le planning</h4>
+    <button class="btn gold" onclick="mix()">🎲 Mix aléatoire</button>
+    <button class="btn" onclick="autoRot()">🔄 Rotation dans l'ordre de la liste</button>
+    <p class="hint">Pour modifier à la main, appuie sur un nom dans le tableau.</p>`;
   }else{
-    h+=`<p class="info">Lecture seule · le chef de chambre modifie via 🔒</p>`;
+    h+=`<p class="hint">Lecture seule · le chef de chambre modifie via 🔒 Admin</p>`;
   }
   return h;
 }
-function setCell(d,t,v){if(!admin)return;state.plan[d][t]=v;save();render();toast('Planning modifié ✓')}
-function autoRot(){if(!admin)return;if(confirm('Remettre la rotation dans l\'ordre ? Les modifs du planning seront écrasées.')){state.plan=rot(state.members);save();render();toast('Rotation remise ✓')}}
+function pick(d,t){
+  if(!admin)return;
+  const cur=state.plan[d][t];
+  modal(`<h3>✏️ ${DAYS[d]} · ${TASKS[t].l}</h3><div class="pick">${state.members.map((m,i)=>`<button class="btn ${m===cur?'gold':''}" onclick="setCell(${d},${t},${i})"><span style="color:${color(m)}">■</span> ${esc(m)}${m===cur?' ✔':''}</button>`).join('')}</div>
+  <button class="btn" onclick="closeModal()">Annuler</button>`);
+}
+function setCell(d,t,i){if(!admin)return;state.plan[d][t]=state.members[i];save();closeModal();render();toast('✔ Planning modifié')}
+function autoRot(){if(!admin)return;if(confirm('Remettre la rotation dans l\'ordre ? Le planning actuel sera remplacé.')){state.plan=rot(state.members);save();render();toast('🔄 Rotation remise')}}
 function mix(){
   if(!admin)return;
   if(!confirm('Mélanger le planning au hasard ? Le planning actuel sera remplacé.'))return;
   const m=[...state.members];
   for(let i=m.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[m[i],m[j]]=[m[j],m[i]]}
-  state.plan=rot(m);save();render();toast('Planning mélangé 🎲');
+  state.plan=rot(m);save();render();toast('🎲 Planning mélangé !');
 }
 
 function vEquipe(){
-  let h=`<div class="sub" style="margin-bottom:12px">Au 2ᵉ rappel, la personne passe en rouge et tu peux faire un compte rendu.</div>`;
+  let h=`<p class="sub" style="margin:0 0 10px">Au <b>2<sup>e</sup> rappel</b>, la personne passe en <b style="color:#c00">rouge</b> et tu peux faire un compte rendu.</p>`;
   state.members.forEach((m,i)=>{
     const rs=rappelsOf(m),c=rs.length,bad=c>=2,last=rs[c-1];
-    const badge=c===0?'<span class="badge">✓ RAS</span>':c===1?'<span class="badge w">1 rappel</span>':`<span class="badge r">⚠ ${c} rappels</span>`;
-    h+=`<div class="mem ${bad?'bad':''}"><div class="mt"><h3><span class="dot" style="background:${color(m)}"></span>${esc(m)}${m===state.chef?' 👑':''}</h3>${badge}</div>
-    ${last?`<div class="sub">Dernier : ${frS(last.date)} · ${esc(last.task)}${last.motif?' — '+esc(last.motif):''}</div>`:''}
-    <div class="acts"><button class="btn ${bad?'red':''}" onclick="addRappel(${i})">+ Rappel</button><button class="btn sec" onclick="histo(${i})">Historique</button></div>
-    ${bad?`<button class="btn gold" onclick="compteRendu(${i})">📝 Faire le compte rendu</button>`:''}</div>`;
+    const st=c===0?'<span class="st ok">✔ RAS</span>':c===1?'<span class="st w">1 RAPPEL</span>':`<span class="st r blink">⚠ ${c} RAPPELS</span>`;
+    h+=`<fieldset class="grp ${bad?'bad':''}"><legend>${esc(m)}${m===state.chef?' ★':''}</legend>
+    ${st}${last?`<div class="sub">Dernier : ${frS(last.date)} · ${esc(last.task)}${last.motif?' — '+esc(last.motif):''}</div>`:''}
+    <div class="row2"><button class="btn ${bad?'red':''}" onclick="addRappel(${i})">+ Rappel</button><button class="btn" onclick="histo(${i})">📂 Historique</button></div>
+    ${bad?`<button class="btn gold" onclick="compteRendu(${i})">📝 Faire le compte rendu</button>`:''}</fieldset>`;
   });
   if(state.reports.length){
-    h+='<div class="sec-t">Comptes rendus enregistrés</div>';
+    h+='<h4>📁 Comptes rendus enregistrés</h4>';
     state.reports.slice().reverse().forEach(r=>{
-      h+=`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div><b>${esc(r.name)}</b><div class="sub">${frS(r.date)} · ${r.items.length} manquement(s)</div></div><button class="btn sm sec" onclick="showReport('${r.id}')">Voir</button></div>`;
+      h+=`<fieldset class="grp" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div><b>${esc(r.name)}</b><div class="sub">${frS(r.date)} · ${r.items.length} manquement(s)</div></div><button class="btn sm" onclick="showReport('${r.id}')">Ouvrir</button></fieldset>`;
     });
   }
   return h;
@@ -246,12 +292,11 @@ function vEquipe(){
 /* ---------- rappels ---------- */
 function addRappel(i){
   const m=state.members[i];
-  modal(`<h3>Rappel — ${esc(m)}</h3>
+  modal(`<h3>⚠ Rappel — ${esc(m)}</h3>
   <div class="f"><span>Date</span><input type="date" id="rd" value="${iso(new Date())}" onchange="preTask(${i})"></div>
   <div class="f"><span>Tâche concernée</span><select id="rt">${MOTIFS.map(x=>`<option>${x}</option>`).join('')}</select></div>
   <div class="f"><span>Ce qui a été mal fait</span><textarea id="rm" rows="3" placeholder="Ex : poubelle pas descendue avant l'appel"></textarea></div>
-  <button class="btn red" onclick="saveRappel(${i})">Enregistrer le rappel</button>
-  <button class="btn sec" onclick="closeModal()">Annuler</button>`);
+  <div class="row2"><button class="btn red" onclick="saveRappel(${i})">Enregistrer</button><button class="btn" onclick="closeModal()">Annuler</button></div>`);
   preTask(i);
 }
 function preTask(i){
@@ -265,14 +310,14 @@ function saveRappel(i){
   state.rappels.push({id:uid(),name:m,date,task:$('rt').value,motif:$('rm').value.trim()});
   save();closeModal();render();
   const c=count(m);
-  toast(c>=2?`⚠ ${c}ᵉ rappel : ${m} passe en rouge`:`Rappel ajouté pour ${m}`);
+  toast(c>=2?`⚠ ${c}e rappel : ${m} passe en rouge`:`Rappel ajouté pour ${m}`);
 }
 function histo(i){
   const m=state.members[i],rs=rappelsOf(m);
-  modal(`<h3>Historique — ${esc(m)}</h3>
-  ${rs.length?rs.map(r=>`<div class="hist"><div><b>${frS(r.date)}</b> · ${esc(r.task)}<div class="sub">${esc(r.motif||'—')}</div></div><button class="x" onclick="delRappel('${r.id}',${i})">✕</button></div>`).join(''):'<p class="sub">Aucun rappel.</p>'}
-  ${rs.length?`<button class="btn sec" onclick="resetRappels(${i})">Remettre ses rappels à zéro</button>`:''}
-  <button class="btn sec" onclick="closeModal()">Fermer</button>`);
+  modal(`<h3>📂 Historique — ${esc(m)}</h3>
+  ${rs.length?rs.map(r=>`<div class="hist"><div><b>${frS(r.date)}</b> · ${esc(r.task)}<div class="sub">${esc(r.motif||'—')}</div></div><button class="x" onclick="delRappel('${r.id}',${i})">✕</button></div>`).join(''):'<p>Aucun rappel.</p>'}
+  ${rs.length?`<button class="btn" onclick="resetRappels(${i})">Remettre ses rappels à zéro</button>`:''}
+  <button class="btn" onclick="closeModal()">Fermer</button>`);
 }
 function delRappel(id,i){if(!confirm('Supprimer ce rappel ?'))return;state.rappels=state.rappels.filter(r=>r.id!==id);save();render();histo(i)}
 function resetRappels(i){const m=state.members[i];if(!confirm(`Remettre les rappels de ${m} à zéro ?`))return;state.rappels=state.rappels.filter(r=>r.name!==m);save();closeModal();render();toast('Rappels remis à zéro')}
@@ -282,13 +327,13 @@ function compteRendu(i){
   const m=state.members[i],rs=rappelsOf(m);
   const obs=`Malgré ${rs.length} rappels, ${m} n'a pas effectué correctement les tâches qui lui étaient attribuées dans la chambre 128.`;
   modal(`<h3>📝 Compte rendu — ${esc(m)}</h3>
-  <div class="sub" style="margin-bottom:6px">Rédigé par ${esc(state.chef)}, chef de chambre</div>
-  <div class="sec-t">Manquements (${rs.length})</div>
+  <p class="sub" style="margin-top:0">Rédigé par ${esc(state.chef)}, chef de chambre</p>
+  <h4>Manquements (${rs.length})</h4>
   ${rs.map(r=>`<div class="hist"><div><b>${esc(frLong(r.date))}</b><div>${esc(r.task)} — ${esc(r.motif||'—')}</div></div></div>`).join('')}
-  <div class="f" style="margin-top:12px"><span>Observations du chef de chambre</span><textarea id="obs" rows="4">${esc(obs)}</textarea></div>
-  <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin:8px 0"><input type="checkbox" id="rz" style="width:auto"> Remettre ses rappels à zéro après</label>
-  <button class="btn gold" onclick="saveReport(${i})">Enregistrer et générer l'image</button>
-  <button class="btn sec" onclick="closeModal()">Annuler</button>`);
+  <div class="f" style="margin-top:10px"><span>Observations du chef de chambre</span><textarea id="obs" rows="4">${esc(obs)}</textarea></div>
+  <label style="display:flex;gap:6px;align-items:center;font-size:11px;margin:6px 0"><input type="checkbox" id="rz" style="width:auto"> Remettre ses rappels à zéro après</label>
+  <button class="btn gold" onclick="saveReport(${i})">💾 Enregistrer et générer l'image</button>
+  <button class="btn" onclick="closeModal()">Annuler</button>`);
 }
 function saveReport(i){
   const m=state.members[i];
@@ -304,41 +349,37 @@ function reportText(r){
 function showReport(id){
   const r=state.reports.find(x=>x.id===id);if(!r)return;
   showImg(drawReport(r),`compte-rendu-${slug(r.name)}-${r.date}.png`,`Compte rendu — ${r.name}`,
-    `<button class="btn sec" onclick="copyReport('${id}')">📋 Copier le texte</button><button class="btn sec" style="color:var(--red)" onclick="delReport('${id}')">🗑️ Supprimer ce compte rendu</button>`);
+    `<button class="btn" onclick="copyReport('${id}')">📋 Copier le texte</button><button class="btn" style="color:#c00" onclick="delReport('${id}')">🗑️ Supprimer ce compte rendu</button>`);
 }
 function copyReport(id){
   const r=state.reports.find(x=>x.id===id);
-  if(navigator.clipboard)navigator.clipboard.writeText(reportText(r)).then(()=>toast('Texte copié ✓'),()=>toast('Copie impossible'));
+  if(navigator.clipboard)navigator.clipboard.writeText(reportText(r)).then(()=>toast('📋 Texte copié'),()=>toast('Copie impossible'));
   else toast('Copie impossible');
 }
 function delReport(id){if(!confirm('Supprimer ce compte rendu ?'))return;state.reports=state.reports.filter(r=>r.id!==id);save();closeModal();render()}
 
-/* ---------- export / réglages ---------- */
+/* ---------- images / réglages ---------- */
 function vExport(){
-  return `<div class="sec-t">Images du planning</div>
-  <div class="card"><button class="btn" style="margin-top:0" onclick="exportGlobal()">🖼️ Planning global</button>
-  <div class="sec-t" style="margin-top:16px">Planning par personne</div>
-  <div class="grid2">${state.members.map((m,i)=>`<button class="btn sec" onclick="exportPerson(${i})">${esc(m)}</button>`).join('')}</div></div>
-  ${admin?`
-  <div class="sec-t">Réglages</div>
-  <div class="card" style="padding:10px 14px"><div class="sub" style="margin:0">${remote?'🟢 En ligne : les modifs sont visibles par tout le monde':'🟠 Mode local : les modifs restent sur ce téléphone (fonction Netlify non détectée)'}</div></div>
-  <div class="card">
+  return `<fieldset class="grp"><legend>🖼️ Planning global</legend><p class="sub" style="margin-top:0">Le tableau complet de la semaine, à envoyer sur le groupe.</p><button class="btn go" onclick="exportGlobal()">Générer l'image</button></fieldset>
+  <fieldset class="grp"><legend>👤 Planning par personne</legend><div class="pick">${state.members.map((m,i)=>`<button class="btn" onclick="exportPerson(${i})"><span style="color:${color(m)}">■</span> ${esc(m)}</button>`).join('')}</div></fieldset>`;
+}
+function vReglages(){
+  return `<fieldset class="grp"><legend>État</legend><div class="sub" style="margin:0">${remote?'🟢 <b>En ligne</b> : les modifs sont visibles par tout le monde':'🟠 <b>Mode local</b> : les modifs restent sur ce téléphone'}</div></fieldset>
+  <fieldset class="grp"><legend>⚙ Paramètres</legend>
     <div class="f"><span>Semaine du (lundi)</span><input type="date" value="${state.week}" onchange="setWeek(this.value)"></div>
     <div class="f"><span>Chef de chambre</span><select onchange="setChef(this.value)">${state.members.map(m=>`<option value="${esc(m)}" ${m===state.chef?'selected':''}>${esc(m)}</option>`).join('')}</select></div>
-    <div class="f"><span>Noms</span>${state.members.map((m,i)=>`<input value="${esc(m)}" style="margin-bottom:6px" onchange="rename(${i},this.value)">`).join('')}</div>
-  </div>
-
-  <div class="sec-t">Sauvegarde</div>
-  <div class="card">
-    <div class="sub">Garde une copie de secours de tout (planning, rappels, comptes rendus).</div>
-    <button class="btn sec" onclick="exportJSON()">💾 Exporter la sauvegarde</button>
-    <label class="btn sec">📂 Importer une sauvegarde<input type="file" accept=".json,application/json" hidden onchange="importJSON(this)"></label>
-    <button class="btn sec" onclick="logout()">🔒 Quitter le mode admin</button>
-    <button class="btn sec" style="color:var(--red)" onclick="resetAll()">Tout réinitialiser</button>
-  </div>`:''}`;
+    <div class="f"><span>Noms</span>${state.members.map((m,i)=>`<input value="${esc(m)}" style="margin-bottom:4px" onchange="rename(${i},this.value)">`).join('')}</div>
+  </fieldset>
+  <fieldset class="grp"><legend>💾 Sauvegarde</legend>
+    <div class="sub" style="margin:0">Copie de secours de tout (planning, rappels, comptes rendus).</div>
+    <button class="btn" onclick="exportJSON()">💾 Exporter la sauvegarde</button>
+    <label class="btn">📂 Importer une sauvegarde<input type="file" accept=".json,application/json" hidden onchange="importJSON(this)"></label>
+    <button class="btn" onclick="logout()">🔒 Quitter le mode admin</button>
+    <button class="btn red" onclick="resetAll()">Tout réinitialiser</button>
+  </fieldset>`;
 }
 function setWeek(v){if(!v)return;state.week=mondayISO(new Date(v+'T12:00:00'));save();render();toast('Semaine mise à jour')}
-function setChef(v){state.chef=v;save();render();toast('Chef de chambre : '+v)}
+function setChef(v){state.chef=v;save();render();toast('★ Chef de chambre : '+v)}
 function rename(i,v){
   v=v.trim().toUpperCase();const old=state.members[i];
   if(!v||v===old||state.members.includes(v)){render();return}
@@ -347,7 +388,7 @@ function rename(i,v){
   state.rappels.forEach(r=>{if(r.name===old)r.name=v});
   state.reports.forEach(r=>{if(r.name===old)r.name=v;if(r.chef===old)r.chef=v});
   if(state.chef===old)state.chef=v;
-  save();render();toast('Nom modifié ✓');
+  save();render();toast('✔ Nom modifié');
 }
 function exportJSON(){
   const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
@@ -355,81 +396,110 @@ function exportJSON(){
 }
 function importJSON(inp){
   const f=inp.files[0];if(!f)return;const rd=new FileReader();
-  rd.onload=()=>{try{const s=JSON.parse(rd.result);if(!Array.isArray(s.members)||!Array.isArray(s.plan))throw 0;s.rappels=s.rappels||[];s.reports=s.reports||[];state=s;save();render();toast('Sauvegarde importée ✓')}catch(e){toast('Fichier invalide')}};
+  rd.onload=()=>{try{const s=norm(JSON.parse(rd.result));if(!s)throw 0;state=s;save();render();toast('✔ Sauvegarde importée')}catch(e){toast('Fichier invalide')}};
   rd.readAsText(f);
 }
 function resetAll(){if(confirm('Tout effacer (planning, rappels, comptes rendus) ?')){state=defaults();save();render();toast('Réinitialisé')}}
 
-/* ---------- modal / toast ---------- */
-function modal(html){const m=$('modal');m.innerHTML=`<div class="sheet">${html}</div>`;m.hidden=false;m.onclick=e=>{if(e.target===m)closeModal()}}
+/* ---------- pop-up / bulle ---------- */
+function modal(html){
+  const m=$('modal');const t=html.match(/^\s*<h3>([\s\S]*?)<\/h3>/);
+  const title=t?t[1]:'Chambre 128';const body=t?html.slice(t[0].length):html;
+  m.innerHTML=`<div class="win dlg"><div class="tb">${title}<div class="ctl"><span class="x" onclick="closeModal()">✕</span></div></div><div class="wc">${body}</div></div>`;
+  m.hidden=false;m.onclick=e=>{if(e.target===m)closeModal()};
+}
 function closeModal(){$('modal').hidden=true;$('modal').innerHTML=''}
-let tt;function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);clearTimeout(tt);tt=setTimeout(()=>d.remove(),2200)}
+let tt;function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent='💬 '+t;document.body.appendChild(d);clearTimeout(tt);tt=setTimeout(()=>d.remove(),2300)}
 
-/* ---------- images (canvas) ---------- */
-const F=(s,w)=>`${w||'600'} ${s}px -apple-system, system-ui, "Segoe UI", Roboto, Arial, sans-serif`;
+/* ---------- dessin des images (style années 2000) ---------- */
+const F=(s,w,fam)=>`${w||'bold'} ${s}px ${fam||'Tahoma, Verdana, Arial, sans-serif'}`;
 function cv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 function rrect(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()}
 function txt(x,s,X,Y,font,col,al){x.font=font;x.fillStyle=col;x.textAlign=al||'left';x.textBaseline='middle';x.fillText(s,X,Y)}
-function fit(x,s,maxW,size,w){let z=size;x.font=F(z,w);while(x.measureText(s).width>maxW&&z>12){z--;x.font=F(z,w)}return F(z,w)}
-function hexA(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
-function bg(x,W,H){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#10201a');g.addColorStop(1,'#0a120e');x.fillStyle=g;x.fillRect(0,0,W,H)}
+function fit(x,s,maxW,size,w,fam){let z=size;x.font=F(z,w,fam);while(x.measureText(s).width>maxW&&z>10){z--;x.font=F(z,w,fam)}return F(z,w,fam)}
 function wrap(x,t,w){const out=[];String(t).split('\n').forEach(p=>{let line='';p.split(' ').forEach(word=>{const test=line?line+' '+word:word;if(x.measureText(test).width>w&&line){out.push(line);line=word}else line=test});out.push(line)});return out}
-function pill(x,n,cx,cy,maxW,sm){
-  const h=sm?40:52,font=fit(x,n,maxW-44,sm?22:26,'800');x.font=font;
-  const w=Math.min(maxW,x.measureText(n).width+44);
-  rrect(x,cx-w/2,cy-h/2,w,h,h/2);x.fillStyle=hexA(color(n),.2);x.fill();x.strokeStyle=color(n);x.lineWidth=2;x.stroke();
-  txt(x,n,cx,cy+1,font,'#fff','center');
+
+// Fond bleu XP + fenêtre beige avec barre de titre. Renvoie le y de départ du contenu.
+function xpWindow(x,W,H,title){
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#5a8be0');g.addColorStop(.4,'#245edb');g.addColorStop(1,'#1941a5');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<W;i+=8)for(let j=0;j<H;j+=8)x.fillRect(i,j,1.5,1.5);
+  const X=24,Y=24,w=W-48,h=H-48;
+  x.fillStyle='rgba(0,0,30,.45)';rrect(x,X+6,Y+8,w,h,14);x.fill();
+  x.fillStyle='#0831d9';rrect(x,X,Y,w,h,14);x.fill();
+  x.fillStyle='#ece9d8';x.fillRect(X+6,Y+64,w-12,h-70);
+  const tg=x.createLinearGradient(0,Y,0,Y+64);tg.addColorStop(0,'#0997ff');tg.addColorStop(.12,'#0053ee');tg.addColorStop(.5,'#0050ee');tg.addColorStop(.88,'#0066ff');tg.addColorStop(1,'#003dd7');
+  x.fillStyle=tg;rrect(x,X,Y,w,64,14);x.fill();x.fillRect(X,Y+40,w,24);
+  x.font=F(28);x.textBaseline='middle';x.textAlign='left';x.fillStyle='#0f1089';x.fillText(title,X+22,Y+34);x.fillStyle='#fff';x.fillText(title,X+20,Y+32);
+  [['_','#1a5ad8'],['□','#1a5ad8'],['✕','#c8401c']].forEach(([s,c],k)=>{const bx=X+w-150+k*46;x.fillStyle=c;rrect(x,bx,Y+12,40,40,6);x.fill();x.strokeStyle='#fff';x.lineWidth=2;x.stroke();txt(x,s,bx+20,Y+32,F(22),'#fff','center')});
+  return Y+64;
 }
-function chefBand(x,X,Y,W,label){
-  rrect(x,X,Y,W,80,18);x.fillStyle='#2e2610';x.fill();x.strokeStyle='#6b5a26';x.lineWidth=2;x.stroke();
-  txt(x,label,X+26,Y+40,fit(x,label,W-52,30,'800'),'#d4af52');
+function wordArt(x,s,X,Y,size,maxW){
+  const font=fit(x,s,maxW,size,'italic 900','"Arial Black", Impact, sans-serif');
+  x.font=font;x.textAlign='left';x.textBaseline='middle';
+  x.fillStyle='#000';x.fillText(s,X+4,Y+4);
+  const g=x.createLinearGradient(0,Y-size/2,0,Y+size/2);g.addColorStop(0,'#fff600');g.addColorStop(.5,'#ffae00');g.addColorStop(1,'#ff3c00');
+  x.fillStyle=g;x.fillText(s,X,Y);x.strokeStyle='#6b1800';x.lineWidth=2;x.strokeText(s,X,Y);
+}
+function cell(x,X,Y,w,h,fill){x.fillStyle=fill;x.fillRect(X,Y,w,h);x.strokeStyle='#808080';x.lineWidth=2;x.strokeRect(X,Y,w,h)}
+function headCell(x,X,Y,w,h,label){const g=x.createLinearGradient(0,Y,0,Y+h);g.addColorStop(0,'#ffffff');g.addColorStop(1,'#d6d3ce');cell(x,X,Y,w,h,g);txt(x,label,X+w/2,Y+h/2,fit(x,label,w-16,24),'#000','center')}
+function chefBox(x,X,Y,w,label){
+  const g=x.createLinearGradient(0,Y,0,Y+76);g.addColorStop(0,'#fffbe0');g.addColorStop(1,'#ffe68a');
+  x.fillStyle=g;x.fillRect(X,Y,w,76);x.strokeStyle='#d4a800';x.lineWidth=5;x.strokeRect(X,Y,w,76);
+  txt(x,label,X+w/2,Y+38,fit(x,label,w-40,28),'#8a1a00','center');
 }
 
 function drawGlobal(){
-  const W=1600,P=50,dayW=250,rowH=120,headH=76,top=300;
-  const cols=[{l:'TIG divers',i:'🧹',t:[0,1]},{l:'Poubelle',i:'🗑️',t:[2]},{l:'Sol chambre',i:'🧽',t:[3]},{l:'Salle de bain',i:'🚿',t:[4]}];
-  const colW=(W-2*P-dayW)/cols.length,H=top+headH+8+7*rowH+90;
-  const c=cv(W,H),x=c.getContext('2d');bg(x,W,H);
-  x.fillStyle='#3fa463';x.fillRect(0,0,W,10);
-  txt(x,'CHAMBRE 128',P,90,F(66,'800'),'#fff');
-  txt(x,'Planning des tâches — semaine du '+fr(dayDate(0))+' au '+fr(dayDate(6)),P,152,F(30,'500'),'#8fa598');
-  chefBand(x,P,192,W-2*P,'👑  CHEF DE CHAMBRE : '+state.chef+'   ·   vérification quotidienne des lits et du rangement');
-  rrect(x,P,top,W-2*P,headH,16);x.fillStyle='#1f3a2a';x.fill();
-  txt(x,'JOUR',P+24,top+headH/2,F(24,'800'),'#8fe0a8');
-  cols.forEach((co,k)=>txt(x,co.i+' '+co.l.toUpperCase(),P+dayW+colW*k+colW/2,top+headH/2,F(23,'800'),'#8fe0a8','center'));
+  const W=1500,P=60,rowH=118,headH=86,dayW=200,top=420;
+  const H=top+headH+7*rowH+110;
+  const c=cv(W,H),x=c.getContext('2d');
+  const y0=xpWindow(x,W,H,'🪖 Chambre128.exe — Planning de la semaine');
+  wordArt(x,'CHAMBRE 128',P,y0+80,96,W-2*P);
+  txt(x,`Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))} · 4e compagnie`,P,y0+160,F(30,'bold'),'#0046d5');
+  chefBox(x,P,y0+200,W-2*P,`★ CHEF DE CHAMBRE : ${state.chef} ★  vérification des lits et du rangement tous les jours`);
+  const colW=(W-2*P-dayW)/COLS.length;
+  headCell(x,P,top,dayW,headH,'JOUR');
+  COLS.forEach((co,k)=>headCell(x,P+dayW+colW*k,top,colW,headH,co.i+' '+co.l.toUpperCase()));
   DAYS.forEach((dn,d)=>{
-    const y=top+headH+8+d*rowH,h=rowH-10,cy=y+h/2;
-    rrect(x,P,y,W-2*P,h,14);x.fillStyle=d%2?'#13201a':'#17281f';x.fill();
-    txt(x,dn,P+24,cy-14,F(30,'800'),'#fff');
-    txt(x,fr(dayDate(d)),P+24,cy+20,F(22,'500'),'#8fa598');
-    cols.forEach((co,k)=>{
-      const cx=P+dayW+colW*k+colW/2,names=co.t.map(t=>state.plan[d][t]);
-      if(names.length===1)pill(x,names[0],cx,cy,colW-28);
-      else{pill(x,names[0],cx,cy-24,colW-28,true);pill(x,names[1],cx,cy+24,colW-28,true)}
+    const y=top+headH+d*rowH,fill=d%2?'#eef3ff':'#ffffff';
+    const dg=x.createLinearGradient(P,0,P+dayW,0);dg.addColorStop(0,'#dfe8f7');dg.addColorStop(1,'#c3d1ef');
+    cell(x,P,y,dayW,rowH,dg);
+    txt(x,dn,P+dayW/2,y+rowH/2-16,F(30),'#000','center');
+    txt(x,fr(dayDate(d)),P+dayW/2,y+rowH/2+22,F(22,'normal'),'#444','center');
+    COLS.forEach((co,k)=>{
+      const X=P+dayW+colW*k;cell(x,X,y,colW,rowH,fill);
+      const names=co.t.map(t=>state.plan[d][t]);
+      names.forEach((n,j)=>{const cy=names.length===1?y+rowH/2:y+rowH/2+(j?24:-24);txt(x,n,X+colW/2,cy,fit(x,n,colW-24,names.length===1?32:28),color(n),'center')});
+      if(names.length===2){x.strokeStyle='#bbb';x.setLineDash([6,5]);x.lineWidth=1.5;x.beginPath();x.moveTo(X+20,y+rowH/2);x.lineTo(X+colW-20,y+rowH/2);x.stroke();x.setLineDash([])}
     });
   });
-  txt(x,'Chambre 128 · 4ᵉ compagnie',W/2,H-42,F(22,'500'),'#5d7266','center');
+  x.strokeStyle='#404040';x.lineWidth=4;x.strokeRect(P,top,W-2*P,headH+7*rowH);
+  txt(x,'Optimisé pour Internet Explorer 6.0 — © 2026 Chambre 128',W/2,H-62,F(20,'normal'),'#555','center');
   return c;
 }
 
 function drawPerson(i){
-  const m=state.members[i],isChef=m===state.chef,W=1080,P=60,rowH=118,top=isChef?370:270,H=top+7*rowH+90;
-  const c=cv(W,H),x=c.getContext('2d');bg(x,W,H);
-  x.fillStyle=color(m);x.fillRect(0,0,W,12);
-  txt(x,'CHAMBRE 128 · PLANNING PERSONNEL',P,78,F(26,'700'),'#8fa598');
-  txt(x,m,P,150,fit(x,m,W-2*P,78,'800'),'#fff');
-  txt(x,'Semaine du '+fr(dayDate(0))+' au '+fr(dayDate(6)),P,216,F(28,'500'),'#8fa598');
-  if(isChef)chefBand(x,P,255,W-2*P,'👑 Chef de chambre — vérif. lits & rangement chaque jour');
+  const m=state.members[i],isChef=m===state.chef,W=1080,P=56,rowH=112,headH=72;
+  const top=isChef?420:330,H=top+headH+7*rowH+110;
+  const c=cv(W,H),x=c.getContext('2d');
+  const y0=xpWindow(x,W,H,'👤 Planning perso');
+  txt(x,'CHAMBRE 128 · PLANNING PERSONNEL',P,y0+44,F(24),'#0046d5');
+  wordArt(x,m,P,y0+120,90,W-2*P);
+  txt(x,`Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))}`,P,y0+196,F(28,'bold'),'#333');
+  if(isChef)chefBox(x,P,y0+232,W-2*P,'★ CHEF DE CHAMBRE ★ vérif. lits & rangement chaque jour');
+  const dayW=260,tW=W-2*P-dayW;
+  headCell(x,P,top,dayW,headH,'JOUR');headCell(x,P+dayW,top,tW,headH,'TÂCHE(S)');
   DAYS.forEach((dn,d)=>{
-    const y=top+d*rowH,h=rowH-14,cy=y+h/2,ts=tasksOf(m,d);
-    rrect(x,P,y,W-2*P,h,18);x.fillStyle=d%2?'#13201a':'#17281f';x.fill();
-    x.fillStyle=ts.length?color(m):'#2b3d33';x.fillRect(P,y+14,6,h-28);
-    txt(x,dn,P+30,cy-14,F(32,'800'),'#fff');
-    txt(x,fr(dayDate(d)),P+30,cy+22,F(22,'500'),'#8fa598');
+    const y=top+headH+d*rowH,ts=tasksOf(m,d),isT=iso(dayDate(d))===iso(new Date());
+    const dg=x.createLinearGradient(P,0,P+dayW,0);dg.addColorStop(0,'#dfe8f7');dg.addColorStop(1,'#c3d1ef');
+    cell(x,P,y,dayW,rowH,dg);
+    txt(x,dn,P+dayW/2,y+rowH/2-15,F(30),'#000','center');
+    txt(x,fr(dayDate(d)),P+dayW/2,y+rowH/2+22,F(22,'normal'),'#444','center');
+    cell(x,P+dayW,y,tW,rowH,d%2?'#eef3ff':'#ffffff');
     const label=ts.length?ts.map(t=>iconOf(t)+' '+t).join('  +  '):'Repos 😴';
-    txt(x,label,W-P-28,cy,fit(x,label,W-2*P-300,34,'700'),ts.length?'#fff':'#5d7266','right');
+    txt(x,label,P+dayW+tW/2,y+rowH/2,fit(x,label,tW-40,34),ts.length?color(m):'#888','center');
   });
-  txt(x,'Chambre 128 · 4ᵉ compagnie',W/2,H-40,F(22,'500'),'#5d7266','center');
+  x.strokeStyle='#404040';x.lineWidth=4;x.strokeRect(P,top,W-2*P,headH+7*rowH);
+  txt(x,'Optimisé pour Internet Explorer 6.0 — © 2026 Chambre 128',W/2,H-62,F(18,'normal'),'#555','center');
   return c;
 }
 
@@ -442,15 +512,15 @@ function drawReport(r){
   const H=450+itemsH+20+60+obsLines.length*42+50+220;
   const c=cv(W,H),x=c.getContext('2d');
   x.fillStyle='#f6f4ee';x.fillRect(0,0,W,H);
-  x.fillStyle='#1b3f2a';x.fillRect(0,0,W,150);x.fillStyle='#d4af52';x.fillRect(0,150,W,6);
+  x.fillStyle='#0a246a';x.fillRect(0,0,W,150);x.fillStyle='#d4af52';x.fillRect(0,150,W,6);
   txt(x,'COMPTE RENDU',P,62,F(56,'800'),'#fff');
-  txt(x,'Chambre 128 · 4ᵉ compagnie',P,115,F(26,'500'),'#bcd3c4');
+  txt(x,'Chambre 128 · 4e compagnie',P,115,F(26,'500'),'#bcd0ff');
   txt(x,'Concerné : '+r.name,P,215,F(36,'800'),'#111');
   txt(x,'Rédigé par : '+r.chef+', chef de chambre',P,265,F(28,'500'),'#333');
   txt(x,'Date : '+frLong(r.date),P,308,F(28,'500'),'#333');
   txt(x,'Nombre de manquements : '+r.items.length,P,351,F(28,'700'),'#c53b3b');
   x.fillStyle='#d8d3c4';x.fillRect(P,382,maxW,2);
-  txt(x,'MANQUEMENTS CONSTATÉS',P,420,F(24,'800'),'#1b3f2a');
+  txt(x,'MANQUEMENTS CONSTATÉS',P,420,F(24,'800'),'#0a246a');
   let y=450;
   r.items.forEach((it,k)=>{
     const bh=40+itemLines[k].length*40;
@@ -460,7 +530,7 @@ function drawReport(r){
     y+=bh+24;
   });
   y+=20;
-  txt(x,'OBSERVATIONS DU CHEF DE CHAMBRE',P,y+20,F(24,'800'),'#1b3f2a');
+  txt(x,'OBSERVATIONS DU CHEF DE CHAMBRE',P,y+20,F(24,'800'),'#0a246a');
   y+=60;
   obsLines.forEach((l,j)=>txt(x,l,P,y+j*42+20,F(28,'400'),'#222'));
   y+=obsLines.length*42+50;
@@ -473,12 +543,12 @@ function drawReport(r){
 let lastImg=null;
 function showImg(c,name,title,extra){
   const url=c.toDataURL('image/png');lastImg={c,name};
-  modal(`<h3>${esc(title)}</h3><img class="prev" src="${url}" alt="">
-  <a class="btn" href="${url}" download="${esc(name)}">⬇️ Télécharger l'image</a>
-  <button class="btn sec" onclick="shareImg()">📤 Partager (Snap, WhatsApp…)</button>
+  modal(`<h3>🖼️ ${esc(title)}</h3><img class="prev" src="${url}" alt="">
+  <a class="btn go" href="${url}" download="${esc(name)}">⬇️ Télécharger l'image</a>
+  <button class="btn" onclick="shareImg()">📤 Partager (Snap, WhatsApp…)</button>
   ${extra||''}
   <p class="hint">Sur iPhone : appui long sur l'image → « Enregistrer dans Photos »</p>
-  <button class="btn sec" onclick="closeModal()">Fermer</button>`);
+  <button class="btn" onclick="closeModal()">Fermer</button>`);
 }
 function shareImg(){
   if(!lastImg)return;
