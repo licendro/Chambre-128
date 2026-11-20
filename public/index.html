@@ -7,85 +7,88 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Chambre 128 :: Planning</title>
 <style>
-:root{--bg:#0a0d0a;--fg:#33ff66;--dim:#1e8c3e;--hi:#0f2a16;--red:#ff4a4a}
+:root{--bg:#f4f4f5;--card:#fff;--ink:#18181b;--mut:#71717a;--line:#e4e4e7;--soft:#f4f4f5;--green:#16a34a;--greenbg:#f0fdf4;--red:#dc2626;--redbg:#fef2f2}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html{color-scheme:dark}
-body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 "Courier New",Courier,monospace;min-height:100vh;
-  padding:calc(10px + env(safe-area-inset-top)) 8px calc(100px + env(safe-area-inset-bottom))}
-.win{max-width:660px;margin:0 auto;border:2px solid var(--fg);background:var(--bg)}
-.tb{border-bottom:2px solid var(--fg);padding:8px 10px;font-weight:bold;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:1px}
-.tb .ctl{margin-left:auto}
-.tb .ctl span{cursor:pointer;padding:0 4px}
-.wc{padding:10px}
-.hd{display:flex;align-items:center;gap:10px;padding:14px 10px;border-bottom:2px solid var(--fg)}
-.brand{font-size:24px;font-weight:bold;letter-spacing:4px}
-.slogan{color:var(--dim);font-size:12px;letter-spacing:1px}
-.lk{margin-left:auto}
-.tabs{display:flex;border-bottom:2px solid var(--fg)}
-.tabs button{flex:1;background:none;color:var(--fg);border:0;border-right:1px solid var(--dim);font:bold 13px "Courier New",monospace;padding:11px 2px;text-transform:uppercase}
-.tabs button:last-child{border-right:0}
-.tabs button.on{background:var(--fg);color:var(--bg)}
-.tabs .alert{color:var(--red)}
-.tabs button.on .alert{color:#900}
-.panel{padding:10px;min-height:200px}
-table.pl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;border:2px solid var(--fg)}
-.pl th,.pl td{border:1px solid var(--dim);padding:7px 2px;text-align:center;vertical-align:middle;word-break:break-word;line-height:1.25}
-.pl th{border-bottom:2px solid var(--fg);font-weight:bold;text-transform:uppercase;font-size:10.5px}
-.pl td.d{font-weight:bold;font-size:12px}
-.pl td.d small{color:var(--dim);font-weight:normal;font-size:10px}
-.pl tr.today td{background:var(--hi)}
-.nm{font-weight:bold;display:block;padding:2px 1px}
-.nm+.nm{border-top:1px dashed var(--dim);margin-top:3px;padding-top:5px}
-.nm.bad{background:var(--red);color:#000!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,"SF Pro Text",Inter,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(100px + env(safe-area-inset-bottom))}
+.win{max-width:620px;margin:0 auto}
+.hd{display:flex;align-items:flex-start;gap:10px;padding:8px 2px 16px}
+.brand{font-size:30px;font-weight:800;letter-spacing:-.9px;line-height:1.1}
+.slogan{color:var(--mut);font-size:13px;margin-top:3px}
+.lk{margin-left:auto;padding-top:4px}
+.tabs{display:flex;background:#e4e4e7;border-radius:13px;padding:3px;margin-bottom:16px}
+.tabs button{flex:1;background:none;border:0;border-radius:10px;padding:9px 2px;font:600 13px -apple-system,system-ui,sans-serif;color:var(--mut);position:relative}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.tabs .alert{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);vertical-align:middle;margin-left:4px;font-size:0}
+.panel{min-height:200px}
+.tblw{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+table.pl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+.pl th,.pl td{text-align:center;vertical-align:middle;word-break:break-word;line-height:1.25}
+.pl th{color:var(--mut);font-weight:600;font-size:10.5px;padding:11px 1px;border-bottom:1px solid var(--line);background:#fafafa}
+.pl td{padding:10px 1px;border-bottom:1px solid var(--soft);font-weight:600}
+.pl tr:last-child td{border-bottom:0}
+.pl td.d{font-weight:700;font-size:12px}
+.pl td.d small{color:#a1a1aa;font-weight:500;font-size:10px}
+.pl tr.today td{background:var(--greenbg)}
+.pl tr.today td.d{color:var(--green)}
+.nm{display:block;padding:2px 1px}
+.nm+.nm{margin-top:3px}
+.nm.bad{background:var(--red);color:#fff!important;border-radius:6px;margin:1px 3px}
 .pl.adm td.c{cursor:pointer}
-.pl.adm td.c .nm{text-decoration:underline}
-.pl.adm td.c:active{background:var(--hi)}
-.chef{border:2px solid var(--fg);padding:10px;margin-bottom:10px;text-align:center}
-.chef .t{color:var(--dim);font-size:12px;letter-spacing:2px}
-.chef .n{font-size:22px;font-weight:bold;letter-spacing:3px;margin:2px 0}
-.chef .s{font-size:12px}
-@keyframes bl{50%{opacity:0}}
-.blink{animation:bl 1s steps(1) infinite}
-fieldset.grp{border:1px solid var(--dim);margin:0 0 10px;padding:6px 8px 8px}
-fieldset.grp legend{font-weight:bold;padding:0 6px;letter-spacing:1px}
-fieldset.grp.bad{border:2px solid var(--red)}
-fieldset.grp.bad legend,.st.r{color:var(--red)}
-.st{font-weight:bold;font-size:12px}
-.st.w{color:var(--fg)}
-.sub{color:var(--dim);font-size:12px;margin-top:4px}
-.row2{display:flex;gap:6px}
-.row2 .btn{margin-top:6px}
-.btn{display:block;width:100%;margin-top:6px;background:none;color:var(--fg);border:1px solid var(--fg);font:bold 13px "Courier New",Courier,monospace;padding:10px 8px;text-transform:uppercase;text-align:center;text-decoration:none;cursor:pointer;letter-spacing:1px}
-.btn:active,.btn.go,.btn.gold{background:var(--fg);color:var(--bg)}
-.btn.red{border-color:var(--red);color:var(--red)}
-.btn.red:active{background:var(--red);color:#000}
-.btn.sm{display:inline-block;width:auto;padding:6px 10px;margin:0}
-.lock.on{background:var(--fg);color:var(--bg)}
-select,input,textarea{background:#000;color:var(--fg);border:1px solid var(--fg);border-radius:0;padding:7px;font-size:16px;font-family:"Courier New",Courier,monospace;width:100%}
-.f{margin-bottom:8px}
-.f span{display:block;font-weight:bold;font-size:12px;margin-bottom:3px;text-transform:uppercase}
-h4{font-size:13px;margin:14px 0 6px;border-bottom:1px solid var(--dim);padding-bottom:3px;text-transform:uppercase;letter-spacing:1px}
-p{margin:0 0 8px}
-.hist{border:1px solid var(--dim);border-left:4px solid var(--red);padding:6px 8px;margin-bottom:6px;font-size:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
-.hist .x{background:none;border:1px solid var(--dim);color:var(--fg);font:bold 12px monospace;padding:1px 6px}
-.prev{width:100%;border:1px solid var(--dim);display:block}
-.hint{color:var(--dim);font-size:11px;text-align:center;margin:10px 0 0}
-.err{color:var(--red);font-weight:bold;font-size:12px;min-height:16px;margin-top:4px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:10px;z-index:20}
-.dlg{width:100%;max-width:460px;max-height:88vh;display:flex;flex-direction:column;margin:0}
-.dlg .wc{overflow:auto}
-.pick{display:grid;gap:4px}
+.pl.adm td.c .nm{text-decoration:underline;text-decoration-color:#d4d4d8;text-underline-offset:3px}
+.pl.adm td.c:active{background:var(--soft)}
+.chef{background:var(--ink);color:#fff;border-radius:18px;padding:15px 17px;margin-bottom:12px}
+.chef .t{font-size:11px;color:#a1a1aa;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.chef .n{font-size:21px;font-weight:700;margin:3px 0}
+.chef .s{font-size:12.5px;color:#d4d4d8}
+.chef .s b{color:#fff}
+fieldset.grp{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:0 0 12px;padding:12px 14px 14px;min-width:0}
+fieldset.grp legend{float:left;width:100%;padding:0;margin-bottom:6px;font-weight:700;font-size:15px}
+fieldset.grp legend+*{clear:both}
+fieldset.grp.bad{border-color:#fca5a5;background:var(--redbg)}
+fieldset.grp.bad legend{color:var(--red)}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px}
+.st.ok{background:var(--greenbg);color:var(--green)}
+.st.w{background:#fef9c3;color:#a16207}
+.st.r{background:var(--red);color:#fff}
+.sub{color:var(--mut);font-size:12.5px;margin-top:5px}
+.row2{display:flex;gap:8px}
+.btn{display:block;width:100%;margin-top:8px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:13px;font:600 14px -apple-system,system-ui,sans-serif;padding:12px 10px;text-align:center;text-decoration:none;cursor:pointer}
+.btn:active{transform:scale(.98)}
+.btn.go,.btn.gold{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.sm{display:inline-block;width:auto;padding:7px 14px;margin:0;border-radius:99px;font-size:12.5px}
+.lock.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+select,input,textarea{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 11px;font-size:16px;font-family:inherit;width:100%}
+textarea{resize:vertical}
+.f{margin-bottom:10px}
+.f span{display:block;font-weight:600;font-size:12.5px;color:var(--mut);margin-bottom:4px}
+h4{font-size:15px;font-weight:700;margin:18px 0 8px}
+p{margin:0 0 10px}
+.hist{background:var(--soft);border-radius:12px;padding:9px 11px;margin-bottom:6px;font-size:13px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;border-left:3px solid var(--red)}
+.hist .x{background:#fff;border:1px solid var(--line);border-radius:99px;width:28px;height:28px;flex-shrink:0;font-size:13px;color:var(--mut)}
+.prev{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+.hint{color:var(--mut);font-size:12px;text-align:center;margin:12px 0 0}
+.err{color:var(--red);font-weight:600;font-size:12.5px;min-height:18px;margin-top:6px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.dlg{width:100%;max-width:620px;max-height:90vh;display:flex;flex-direction:column;margin:0;background:#fff;border-radius:22px 22px 0 0;animation:up .22s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.tb{display:flex;align-items:center;gap:8px;padding:16px 18px 6px;font-weight:700;font-size:17px}
+.tb .ctl{margin-left:auto}
+.tb .ctl .x{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--mut);font-size:13px;cursor:pointer}
+.wc{padding:8px 18px calc(20px + env(safe-area-inset-bottom));overflow:auto}
+.pick{display:grid;gap:6px}
 .pick .btn{text-align:left;margin:0}
-.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:8px 12px;font:bold 12px "Courier New",monospace;z-index:30;max-width:90vw;text-transform:uppercase}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:99px;padding:10px 16px;font-size:13px;font-weight:500;z-index:30;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
 
 <div class="win">
   <div class="hd">
-    <div><div class="brand">CHAMBRE 128</div><div class="slogan">4E COMPAGNIE</div></div>
-    <div class="lk"><button id="lock" class="btn sm lock" onclick="lockBtn()">ADMIN</button></div>
+    <div><div class="brand">Chambre 128</div><div class="slogan" id="slogan">4e compagnie</div></div>
+    <div class="lk"><button id="lock" class="btn sm lock" onclick="lockBtn()">Admin</button></div>
   </div>
   <div class="tabs" id="nav"></div>
   <div class="panel" id="main"></div>
@@ -162,7 +165,7 @@ let tab='planning';
 
 const rappelsOf=n=>state.rappels.filter(r=>r.name===n).sort((a,b)=>a.date.localeCompare(b.date));
 const count=n=>rappelsOf(n).length;
-const color=n=>'#33ff66';
+const color=n=>'#18181b';
 function tasksOf(n,d){return [...new Set(state.plan[d].map((p,t)=>p===n?TASKS[t].l:null).filter(Boolean))]}
 const iconOf=l=>(TASKS.find(t=>t.l===l)||{i:'•'}).i;
 
@@ -218,7 +221,7 @@ function logout(){setCode('');admin=false;tab='planning';closeModal();if(remote)
 /* ---------- rendu ---------- */
 function go(t){tab=t;render();window.scrollTo(0,0)}
 function render(){
-  const lk=$('lock');lk.textContent=admin?'ADMIN ':'ADMIN';lk.className='btn sm lock'+(admin?' on':'');
+  const lk=$('lock');lk.textContent=admin?'Admin ✓':'Admin';$('slogan').textContent=`4e compagnie · Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))}`;lk.className='btn sm lock'+(admin?' on':'');
   if(!admin&&tab==='equipe')tab='planning';
   const alert=admin&&state.members.some(m=>count(m)>=2);
   const tabs=admin?[['planning','Planning'],['equipe','Rappels'],['export','Images'],['reglages','Réglages']]:[['planning','Planning'],['export','Images']];
@@ -231,18 +234,18 @@ function nameTag(n){return `<span class="nm ${admin&&count(n)>=2?'bad':''}" styl
 
 function vPlanning(){
   const today=iso(new Date());
-  let h=`<div class="chef"><div class="t">CHEF DE CHAMBRE</div><div class="n">${esc(state.chef)}</div><div class="s">Vérification <b>tous les jours</b> : lits faits, rien qui traîne, rangement.</div></div>`;
-  h+=`<table class="pl ${admin?'adm':''}"><colgroup><col style="width:15%"><col><col><col><col></colgroup>
+  let h=`<div class="chef"><div class="t">Chef de chambre</div><div class="n">${esc(state.chef)}</div><div class="s">Vérification <b>tous les jours</b> : lits faits, rien qui traîne, rangement.</div></div>`;
+  h+=`<div class="tblw"><table class="pl ${admin?'adm':''}"><colgroup><col style="width:15%"><col><col><col><col></colgroup>
   <thead><tr><th>Jour</th>${COLS.map(c=>`<th>${c.s}</th>`).join('')}</tr></thead><tbody>`;
   DAYS.forEach((dn,d)=>{
     const dd=dayDate(d),isT=iso(dd)===today;
-    h+=`<tr class="${isT?'today':''}"><td class="d">${isT?'<span class="blink">&gt;</span>':''}${DAYS_S[d]}<br><small>${fr(dd)}</small></td>`;
+    h+=`<tr class="${isT?'today':''}"><td class="d">${DAYS_S[d]}<br><small>${fr(dd)}</small></td>`;
     COLS.forEach(c=>{
       h+=`<td class="c">${c.t.map(t=>`<span ${admin?`onclick="pick(${d},${t})"`:''}>${nameTag(state.plan[d][t])}</span>`).join('')}</td>`;
     });
     h+='</tr>';
   });
-  h+='</tbody></table>';
+  h+='</tbody></table></div>';
   if((state.fixed||[]).length)h+=`<p class="hint">Tous les jours : ${state.fixed.map(f=>`${esc(f.name)} = ${esc(f.task)}`).join(' · ')}</p>`;
   if(admin){
     h+=`<h4>Modifier le planning</h4>
@@ -283,8 +286,8 @@ function vEquipe(){
   let h=`<p class="sub" style="margin:0 0 10px">Au <b>2<sup>e</sup> rappel</b>, la personne passe en <b style="color:#c00">rouge</b> et tu peux faire un compte rendu.</p>`;
   state.members.forEach((m,i)=>{
     const rs=rappelsOf(m),c=rs.length,bad=c>=2,last=rs[c-1];
-    const st=c===0?'<span class="st ok">[ OK ]</span>':c===1?'<span class="st w">[ 1 RAPPEL ]</span>':`<span class="st r">[ ${c} RAPPELS ]</span>`;
-    h+=`<fieldset class="grp ${bad?'bad':''}"><legend>${esc(m)}${m===state.chef?' (CHEF)':''}</legend>
+    const st=c===0?'<span class="st ok">OK</span>':c===1?'<span class="st w">1 rappel</span>':`<span class="st r">${c} rappels</span>`;
+    h+=`<fieldset class="grp ${bad?'bad':''}"><legend>${esc(m)}${m===state.chef?' · chef':''}</legend>
     ${st}${last?`<div class="sub">Dernier : ${frS(last.date)} · ${esc(last.task)}${last.motif?' — '+esc(last.motif):''}</div>`:''}
     <div class="row2"><button class="btn ${bad?'red':''}" onclick="addRappel(${i})">+ Rappel</button><button class="btn" onclick="histo(${i})">Historique</button></div>
     ${bad?`<button class="btn gold" onclick="compteRendu(${i})">Faire le compte rendu</button>`:''}</fieldset>`;
@@ -373,7 +376,7 @@ function vExport(){
   <fieldset class="grp"><legend>Planning par personne</legend><div class="pick">${state.members.map((m,i)=>`<button class="btn" onclick="exportPerson(${i})">${esc(m)}</button>`).join('')}</div></fieldset>`;
 }
 function vReglages(){
-  return `<fieldset class="grp"><legend>État</legend><div class="sub" style="margin:0">${remote?'[EN LIGNE] Les modifs sont visibles par tout le monde.':'[LOCAL] Les modifs restent sur ce téléphone.'}</div></fieldset>
+  return `<fieldset class="grp"><legend>État</legend><div class="sub" style="margin:0">${remote?'● En ligne — les modifs sont visibles par tout le monde.':'● Mode local — les modifs restent sur ce téléphone.'}</div></fieldset>
   <fieldset class="grp"><legend>Tâches fixes</legend>
     <div class="sub" style="margin:0 0 6px">Une personne fait la même tâche tous les jours, le reste est réparti automatiquement entre les autres. Tu peux en mettre plusieurs (2 max sur TIG).</div>
     ${(state.fixed||[]).length?state.fixed.map((f,k)=>`<div class="hist" style="border-left-color:var(--fg);align-items:center"><div><b>${esc(f.name)}</b> → ${esc(f.task)} tous les jours</div><button class="x" onclick="delFixed(${k})">X</button></div>`).join(''):'<p class="sub">Aucune tâche fixe.</p>'}
@@ -422,110 +425,108 @@ function resetAll(){if(confirm('Tout effacer (planning, rappels, comptes rendus)
 function modal(html){
   const m=$('modal');const t=html.match(/^\s*<h3>([\s\S]*?)<\/h3>/);
   const title=t?t[1]:'Chambre 128';const body=t?html.slice(t[0].length):html;
-  m.innerHTML=`<div class="win dlg"><div class="tb">${title}<div class="ctl"><span class="x" onclick="closeModal()">[X]</span></div></div><div class="wc">${body}</div></div>`;
+  m.innerHTML=`<div class="win dlg"><div class="tb">${title}<div class="ctl"><span class="x" onclick="closeModal()">✕</span></div></div><div class="wc">${body}</div></div>`;
   m.hidden=false;m.onclick=e=>{if(e.target===m)closeModal()};
 }
 function closeModal(){$('modal').hidden=true;$('modal').innerHTML=''}
 let tt;function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);clearTimeout(tt);tt=setTimeout(()=>d.remove(),2300)}
 
-/* ---------- dessin des images (style terminal) ---------- */
-const G='#33ff66',GD='#1e8c3e',BK='#0a0d0a',HI='#0f2a16';
-const F=(s,w)=>`${w||'bold'} ${s}px "Courier New", Courier, monospace`;
+/* ---------- dessin des images (style moderne) ---------- */
+const INK='#18181b',MUT='#71717a',LINE='#e4e4e7',BG='#f4f4f5';
+const F=(s,w)=>`${w||'700'} ${s}px -apple-system, "SF Pro Text", Inter, system-ui, "Segoe UI", Roboto, Arial, sans-serif`;
 function cv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
+function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()}
 function txt(x,s,X,Y,font,col,al){x.font=font;x.fillStyle=col;x.textAlign=al||'left';x.textBaseline='middle';x.fillText(s,X,Y)}
 function fit(x,s,maxW,size,w){let z=size;x.font=F(z,w);while(x.measureText(s).width>maxW&&z>10){z--;x.font=F(z,w)}return F(z,w)}
 function wrap(x,t,w){const out=[];String(t).split('\n').forEach(p=>{let line='';p.split(' ').forEach(word=>{const test=line?line+' '+word:word;if(x.measureText(test).width>w&&line){out.push(line);line=word}else line=test});out.push(line)});return out}
-function frame(x,W,H){x.fillStyle=BK;x.fillRect(0,0,W,H);x.strokeStyle=G;x.lineWidth=4;x.strokeRect(24,24,W-48,H-48)}
-function box(x,X,Y,w,h,fill,lw,col){if(fill){x.fillStyle=fill;x.fillRect(X,Y,w,h)}x.strokeStyle=col||GD;x.lineWidth=lw||2;x.strokeRect(X,Y,w,h)}
-function chefBox(x,X,Y,w,label){box(x,X,Y,w,70,null,3,G);txt(x,label,X+w/2,Y+35,fit(x,label,w-40,28),G,'center')}
-
-function drawGlobal(){
-  const W=1500,P=60,rowH=112,headH=70,dayW=210,top=330;
-  const H=top+headH+7*rowH+80;
-  const c=cv(W,H),x=c.getContext('2d');frame(x,W,H);
-  txt(x,'CHAMBRE 128',P,100,F(64),G);
-  txt(x,`PLANNING · SEMAINE DU ${fr(dayDate(0))} AU ${fr(dayDate(6))}`,P,160,F(28,'normal'),GD);
-  chefBox(x,P,210,W-2*P,`CHEF DE CHAMBRE : ${state.chef} — VERIFICATION LITS ET RANGEMENT CHAQUE JOUR`);
-  const colW=(W-2*P-dayW)/COLS.length;
-  box(x,P,top,dayW,headH);txt(x,'JOUR',P+dayW/2,top+headH/2,F(26),G,'center');
-  COLS.forEach((co,k)=>{const X=P+dayW+colW*k;box(x,X,top,colW,headH);txt(x,co.l.toUpperCase(),X+colW/2,top+headH/2,fit(x,co.l.toUpperCase(),colW-16,26),G,'center')});
-  x.fillStyle=G;x.fillRect(P,top+headH-2,W-2*P,3);
-  DAYS.forEach((dn,d)=>{
-    const y=top+headH+d*rowH;
-    box(x,P,y,dayW,rowH);
-    txt(x,dn.toUpperCase(),P+dayW/2,y+rowH/2-15,fit(x,dn.toUpperCase(),dayW-20,28),G,'center');
-    txt(x,fr(dayDate(d)),P+dayW/2,y+rowH/2+20,F(22,'normal'),GD,'center');
-    COLS.forEach((co,k)=>{
-      const X=P+dayW+colW*k;box(x,X,y,colW,rowH);
-      const names=co.t.map(t=>state.plan[d][t]);
-      names.forEach((n,j)=>{const cy=names.length===1?y+rowH/2:y+rowH/2+(j?24:-24);txt(x,n,X+colW/2,cy,fit(x,n,colW-24,names.length===1?32:28),G,'center')});
-      if(names.length===2){x.strokeStyle=GD;x.setLineDash([6,6]);x.lineWidth=1.5;x.beginPath();x.moveTo(X+20,y+rowH/2);x.lineTo(X+colW-20,y+rowH/2);x.stroke();x.setLineDash([])}
+function chefCard(x,X,Y,w,name,txtLine){
+  x.fillStyle=INK;rr(x,X,Y,w,130,30);x.fill();
+  txt(x,'CHEF DE CHAMBRE',X+36,Y+36,F(20,'600'),'#a1a1aa');
+  txt(x,name,X+36,Y+74,F(38,'700'),'#fff');
+  txt(x,txtLine,X+36,Y+108,fit(x,txtLine,w-72,22,'500'),'#d4d4d8');
+}
+function tableCard(x,X,Y,w,headH,rowH,cols,rows){
+  // cols: [{l,w}] ; rows: array of arrays of cell contents (string | string[] | {t,sub})
+  const H=headH+rowH*rows.length;
+  x.save();rr(x,X,Y,w,H,30);x.fillStyle='#fff';x.fill();x.clip();
+  x.fillStyle='#fafafa';x.fillRect(X,Y,w,headH);
+  x.fillStyle=LINE;x.fillRect(X,Y+headH-2,w,2);
+  let cx=X;cols.forEach(c=>{txt(x,c.l,cx+c.w/2,Y+headH/2,fit(x,c.l,c.w-16,22,'600'),MUT,'center');cx+=c.w});
+  rows.forEach((r,i)=>{
+    const y=Y+headH+i*rowH;
+    if(i)x.fillStyle='#f0f0f1',x.fillRect(X+20,y,w-40,2);
+    let cx=X;
+    r.forEach((v,k)=>{
+      const cw=cols[k].w,mx=cx+cw/2,my=y+rowH/2;
+      if(v&&typeof v==='object'&&!Array.isArray(v)){txt(x,v.t,mx,my-15,F(26,'700'),INK,'center');txt(x,v.sub,mx,my+18,F(19,'500'),'#a1a1aa','center')}
+      else if(Array.isArray(v)){v.forEach((n,j)=>txt(x,n,mx,my+(j?20:-20),fit(x,n,cw-20,24,'600'),INK,'center'))}
+      else txt(x,v,mx,my,fit(x,v,cw-20,26,'600'),v==='Repos'?'#a1a1aa':INK,'center');
+      cx+=cw;
     });
   });
-  x.strokeStyle=G;x.lineWidth=4;x.strokeRect(P,top,W-2*P,headH+7*rowH);
+  x.restore();
+  x.strokeStyle=LINE;x.lineWidth=2;rr(x,X,Y,w,H,30);x.stroke();
+  return Y+H;
+}
+
+function drawGlobal(){
+  const W=1400,P=60,headH=72,rowH=110;
+  const H=P+250+headH+7*rowH+P;
+  const c=cv(W,H),x=c.getContext('2d');x.fillStyle=BG;x.fillRect(0,0,W,H);
+  txt(x,'Chambre 128',P,P+36,F(64,'800'),INK);
+  txt(x,`4e compagnie · Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))}`,P,P+92,F(26,'500'),MUT);
+  chefCard(x,P,P+130,W-2*P,state.chef,'Vérification des lits et du rangement tous les jours');
+  const dayW=200,cw=(W-2*P-dayW)/4;
+  const cols=[{l:'Jour',w:dayW},...COLS.map(co=>({l:co.l,w:cw}))];
+  const rows=DAYS.map((dn,d)=>[{t:dn,sub:fr(dayDate(d))},...COLS.map(co=>co.t.length>1?co.t.map(t=>state.plan[d][t]):state.plan[d][co.t[0]])]);
+  tableCard(x,P,P+290,W-2*P,headH,rowH,cols,rows);
   return c;
 }
 
 function drawPerson(i){
-  const m=state.members[i],isChef=m===state.chef,W=1080,P=56,rowH=108,headH=66;
-  const top=isChef?340:260,H=top+headH+7*rowH+80;
-  const c=cv(W,H),x=c.getContext('2d');frame(x,W,H);
-  txt(x,'CHAMBRE 128 · PLANNING PERSONNEL',P,90,F(24,'normal'),GD);
-  txt(x,m,P,160,fit(x,m,W-2*P,72),G);
-  txt(x,`SEMAINE DU ${fr(dayDate(0))} AU ${fr(dayDate(6))}`,P,220,F(26,'normal'),GD);
-  if(isChef)chefBox(x,P,250,W-2*P,'CHEF DE CHAMBRE — VERIF. LITS ET RANGEMENT CHAQUE JOUR');
-  const dayW=260,tW=W-2*P-dayW;
-  box(x,P,top,dayW,headH);txt(x,'JOUR',P+dayW/2,top+headH/2,F(26),G,'center');
-  box(x,P+dayW,top,tW,headH);txt(x,'TACHE',P+dayW+tW/2,top+headH/2,F(26),G,'center');
-  x.fillStyle=G;x.fillRect(P,top+headH-2,W-2*P,3);
-  DAYS.forEach((dn,d)=>{
-    const y=top+headH+d*rowH,ts=tasksOf(m,d);
-    box(x,P,y,dayW,rowH);
-    txt(x,dn.toUpperCase(),P+dayW/2,y+rowH/2-15,fit(x,dn.toUpperCase(),dayW-20,28),G,'center');
-    txt(x,fr(dayDate(d)),P+dayW/2,y+rowH/2+20,F(22,'normal'),GD,'center');
-    box(x,P+dayW,y,tW,rowH);
-    const label=ts.length?ts.join(' + ').toUpperCase():'REPOS';
-    txt(x,label,P+dayW+tW/2,y+rowH/2,fit(x,label,tW-40,32),ts.length?G:GD,'center');
-  });
-  x.strokeStyle=G;x.lineWidth=4;x.strokeRect(P,top,W-2*P,headH+7*rowH);
+  const m=state.members[i],isChef=m===state.chef,W=1080,P=56,headH=70,rowH=104;
+  const top=P+(isChef?300:160),H=top+headH+7*rowH+P;
+  const c=cv(W,H),x=c.getContext('2d');x.fillStyle=BG;x.fillRect(0,0,W,H);
+  txt(x,'Planning de',P,P+20,F(26,'600'),MUT);
+  txt(x,m,P,P+72,fit(x,m,W-2*P,64,'800'),INK);
+  txt(x,`Chambre 128 · Semaine du ${fr(dayDate(0))} au ${fr(dayDate(6))}`,P,P+122,F(24,'500'),MUT);
+  if(isChef)chefCard(x,P,P+150,W-2*P,m,'Vérification des lits et du rangement tous les jours');
+  const dayW=240;
+  const cols=[{l:'Jour',w:dayW},{l:'Tâche',w:W-2*P-dayW}];
+  const rows=DAYS.map((dn,d)=>{const ts=tasksOf(m,d);return[{t:dn,sub:fr(dayDate(d))},ts.length?ts.join(' + '):'Repos']});
+  tableCard(x,P,top,W-2*P,headH,rowH,cols,rows);
   return c;
 }
 
 function drawReport(r){
   const W=1240,P=80,maxW=W-2*P;
   const m=cv(10,10).getContext('2d');
-  m.font=F(26,'normal');const itemLines=r.items.map(it=>wrap(m,`${it.task} — ${it.motif||'—'}`,maxW-40));
-  const obsLines=wrap(m,r.obs||'—',maxW);
-  const itemsH=itemLines.reduce((s,l)=>s+40+l.length*38+24,0);
-  const H=440+itemsH+20+60+obsLines.length*40+50+220;
-  const c=cv(W,H),x=c.getContext('2d');
-  x.fillStyle='#fbfaf6';x.fillRect(0,0,W,H);
-  const K='#111';
-  txt(x,'COMPTE RENDU',P,90,F(56),K);
-  txt(x,'CHAMBRE 128 · 4E COMPAGNIE',P,145,F(24,'normal'),'#444');
-  x.fillStyle=K;x.fillRect(P,180,maxW,3);
-  txt(x,'CONCERNE    : '+r.name,P,225,F(30),K);
-  txt(x,'REDIGE PAR  : '+r.chef+', chef de chambre',P,270,F(26,'normal'),K);
-  txt(x,'DATE        : '+frLong(r.date),P,310,F(26,'normal'),K);
-  txt(x,'MANQUEMENTS : '+r.items.length,P,350,F(26),K);
-  x.fillStyle='#999';x.fillRect(P,380,maxW,2);
-  txt(x,'MANQUEMENTS CONSTATES',P,412,F(24),K);
-  let y=440;
-  r.items.forEach((it,k)=>{
-    const bh=40+itemLines[k].length*38;
-    x.fillStyle=K;x.fillRect(P,y,4,bh);
-    txt(x,frLong(it.date),P+22,y+18,F(26),K);
-    itemLines[k].forEach((l,j)=>txt(x,l,P+22,y+56+j*38,F(26,'normal'),'#333'));
-    y+=bh+24;
+  m.font=F(26,'500');const itemLines=r.items.map(it=>wrap(m,`${it.task} — ${it.motif||'—'}`,maxW-80));
+  const obsLines=wrap(m,r.obs||'—',maxW-60);
+  const itemsH=itemLines.reduce((s,l)=>s+50+l.length*36+16,0);
+  const H=P+420+itemsH+90+obsLines.length*38+60+200;
+  const c=cv(W,H),x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  txt(x,'Compte rendu',P,P+30,F(60,'800'),INK);
+  txt(x,'Chambre 128 · 4e compagnie',P,P+86,F(26,'500'),MUT);
+  x.fillStyle=BG;rr(x,P,P+130,maxW,190,24);x.fill();
+  [['Concerné',r.name],['Rédigé par',r.chef+', chef de chambre'],['Date',frLong(r.date)],['Manquements',String(r.items.length)]].forEach(([k,v],i)=>{
+    txt(x,k,P+30,P+170+i*40,F(24,'500'),MUT);txt(x,v,P+260,P+170+i*40,F(24,i===0||i===3?'700':'500'),i===3?'#dc2626':INK);
   });
-  y+=20;
-  txt(x,'OBSERVATIONS DU CHEF DE CHAMBRE',P,y+20,F(24),K);
-  y+=60;
-  obsLines.forEach((l,j)=>txt(x,l,P,y+j*40+20,F(26,'normal'),'#222'));
-  y+=obsLines.length*40+50;
-  txt(x,'Signature du chef de chambre :',W-P-440,y+20,F(22,'normal'),'#444');
-  x.fillStyle='#888';x.fillRect(W-P-440,y+110,440,2);
-  txt(x,r.chef,W-P,y+140,F(22),'#444','right');
+  let y=P+370;
+  txt(x,'Manquements constatés',P,y,F(30,'700'),INK);y+=36;
+  r.items.forEach((it,k)=>{
+    const bh=50+itemLines[k].length*36;
+    x.fillStyle='#fef2f2';rr(x,P,y,maxW,bh,18);x.fill();x.fillStyle='#dc2626';x.fillRect(P,y+14,5,bh-28);
+    txt(x,frLong(it.date),P+30,y+30,F(24,'700'),INK);
+    itemLines[k].forEach((l,j)=>txt(x,l,P+30,y+66+j*36,F(24,'500'),'#3f3f46'));
+    y+=bh+16;
+  });
+  y+=30;txt(x,'Observations du chef de chambre',P,y,F(30,'700'),INK);y+=46;
+  obsLines.forEach((l,j)=>txt(x,l,P,y+j*38,F(25,'500'),'#3f3f46'));
+  y+=obsLines.length*38+60;
+  txt(x,'Signature du chef de chambre',W-P-440,y,F(22,'500'),MUT);
+  x.fillStyle=LINE;x.fillRect(W-P-440,y+100,440,2);
+  txt(x,r.chef,W-P,y+130,F(22,'600'),MUT,'right');
   return c;
 }
 
