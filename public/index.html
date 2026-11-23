@@ -127,10 +127,15 @@ const capOf=ty=>TASKS.filter(t=>t.l===ty).length;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const solOn=(s,d)=>(s.solDays||[]).includes(d);
 // tâche réelle d'un créneau : le créneau "sol" devient du repos les jours sans sol
-function effT(s,d,t){return t===SOL&&!solOn(s,d)?'Repos':TASKS[t].l}
+// créneaux >= 5 = places de repos en plus quand il y a plus de personnes que de tâches
+function effT(s,d,t){return t>=TASKS.length?'Repos':t===SOL&&!solOn(s,d)?'Repos':TASKS[t].l}
 function typeOn(s,plan,d,n){const t=plan[d].indexOf(n);return t<0?null:effT(s,d,t)}
 // créneaux affichés dans chaque colonne du tableau
-function colSlots(s,d,k){return k===0?[0,1]:k===1?[2]:k===2?(solOn(s,d)?[SOL]:[]):(solOn(s,d)?[REPOS]:[REPOS,SOL])}
+function colSlots(s,d,k){
+  const day=s.plan[d]||[],extra=[];for(let i=TASKS.length;i<day.length;i++)extra.push(i);
+  const sl=k===0?[0,1]:k===1?[2]:k===2?(solOn(s,d)?[SOL]:[]):[...(solOn(s,d)?[REPOS]:[REPOS,SOL]),...extra];
+  return sl.filter(t=>day[t]&&day[t]!=='—');
+}
 // Génère un planning : tâches fixes, limites par personne, jamais la même tâche 2 jours de suite (si possible), répartition équilibrée
 const OPS={max:'au plus',min:'au moins',exact:'exactement'};
 function countPlan(s,plan){const c={};s.members.forEach(n=>c[n]={});plan.forEach((day,d)=>day.forEach((n,t)=>{if(c[n]){const ty=effT(s,d,t);c[n][ty]=(c[n][ty]||0)+1}}));return c}
@@ -151,13 +156,17 @@ function generate(s){
     if(t>=0){used.add(t);fixedSlots.push([t,f.name])}
   });
   const fixedNames=new Set(fixedSlots.map(x=>x[1]));
-  const freeSlots=TASKS.map((_,i)=>i).filter(i=>!used.has(i));
+  // places à remplir : tâches non fixes (le repos part en premier s'il manque du monde), + places de repos si trop de monde
+  let freeSlots=TASKS.map((_,i)=>i).filter(i=>!used.has(i));
   const freePeople=s.members.filter(m=>!fixedNames.has(m)),free=new Set(freePeople);
+  freeSlots=freeSlots.slice(0,freePeople.length);
+  for(let i=TASKS.length;freeSlots.length<freePeople.length;i++)freeSlots.push(i);
+  const width=Math.max(TASKS.length,...freeSlots.map(t=>t+1));
   let best=null,bestScore=Infinity;
   for(let run=0;run<30;run++){
     const plan=[];
     for(let d=0;d<7;d++){
-      const day=new Array(TASKS.length).fill('—');
+      const day=new Array(width).fill('—');
       fixedSlots.forEach(([t,n])=>day[t]=n);
       const p=shuffle([...freePeople]);
       freeSlots.forEach((t,j)=>{if(p[j])day[t]=p[j]});
@@ -442,7 +451,8 @@ function vReglages(){
   <fieldset class="grp"><legend>Paramètres</legend>
     <div class="f"><span>Semaine du (lundi)</span><input type="date" value="${state.week}" onchange="setWeek(this.value)"></div>
     <div class="f"><span>Chef de chambre</span><select onchange="setChef(this.value)">${state.members.map(m=>`<option value="${esc(m)}" ${m===state.chef?'selected':''}>${esc(m)}</option>`).join('')}</select></div>
-    <div class="f"><span>Noms</span>${state.members.map((m,i)=>`<input value="${esc(m)}" style="margin-bottom:4px" onchange="rename(${i},this.value)">`).join('')}</div>
+    <div class="f"><span>Personnes de la chambre</span>${state.members.map((m,i)=>`<div class="row2" style="margin-bottom:6px;align-items:center"><input value="${esc(m)}" onchange="rename(${i},this.value)"><button class="btn sm" style="flex-shrink:0" onclick="removeMember(${i})">Retirer</button></div>`).join('')}
+    <div class="row2" style="align-items:center"><input id="newm" placeholder="Nouveau nom"><button class="btn sm go" style="flex-shrink:0" onclick="addMember()">Ajouter</button></div></div>
   </fieldset>
   <fieldset class="grp"><legend>Sauvegarde</legend>
     <div class="sub" style="margin:0">Copie de secours de tout (planning, rappels, comptes rendus).</div>
@@ -454,6 +464,20 @@ function vReglages(){
 }
 function setWeek(v){if(!v)return;state.week=mondayISO(new Date(v+'T12:00:00'));save();render();toast('Semaine mise à jour')}
 function setChef(v){state.chef=v;save();render();toast('Chef de chambre : '+v)}
+function removeMember(i){
+  if(!admin)return;const m=state.members[i];
+  if(state.members.length<=1){toast('Il faut au moins une personne');return}
+  if(!confirm(`Retirer ${m} de la chambre ? Le planning sera refait.`))return;
+  state.members.splice(i,1);
+  state.fixed=(state.fixed||[]).filter(f=>f.name!==m);state.rules=(state.rules||[]).filter(r=>r.name!==m);
+  if(state.chef===m)state.chef=state.members[0];
+  state.plan=generate(state);save();render();toast(`${m} retiré · planning refait`);
+}
+function addMember(){
+  if(!admin)return;const v=($('newm').value||'').trim().toUpperCase();
+  if(!v||state.members.includes(v)){toast(v?'Ce nom existe déjà':'Entre un nom');return}
+  state.members.push(v);state.plan=generate(state);save();render();toast(`${v} ajouté · planning refait`);
+}
 function rename(i,v){
   v=v.trim().toUpperCase();const old=state.members[i];
   if(!v||v===old||state.members.includes(v)){render();return}
